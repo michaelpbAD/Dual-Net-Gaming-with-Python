@@ -40,7 +40,7 @@ class VierOpEenRijGame():
         self.pijlx=0
         self.pijly=0
 
-
+        self.wint=0
 
 
     def initGraphics(self):
@@ -56,6 +56,20 @@ class VierOpEenRijGame():
         self.screen.fill((255,255,255))
         self.drawBoard()
 
+        #envents/key pres
+        self.eventAndKeys()
+
+        #kontrole
+        self.kontrole()
+
+        if self.wint!=0:
+            for x in range (self.boardBoxW):
+                self.board[0][x]=self.wint
+
+        #update the screen
+        pygame.display.flip()
+
+    def eventAndKeys(self):
         #envents/key pres
         for event in pygame.event.get():
             #quit if the quit button was pressed
@@ -81,6 +95,39 @@ class VierOpEenRijGame():
                         self.playerTurn=1
                         self.pijl=self.player1Box
 
+    def kontrole(self):
+        #kontrole gebeurt allen (y,x) (0,+),(+,0),(+,+),(+,-)
+
+        for y in range(self.boardBoxH):
+            for x in range(self.boardBoxW):
+                if self.board[y][x]!=0:
+                    var=self.board[y][x]
+                    #horisontale controle
+                    if x<(self.boardBoxW-3):
+
+                        if var==self.board[y][x+1] and var==self.board[y][x+2] and var==self.board[y][x+3]:
+                            self.wint=var
+
+                    #vertikaal controle
+                    if y<(self.boardBoxH-3):
+
+                        if var==self.board[y+1][x] and var==self.board[y+2][x] and var==self.board[y+3][x]:
+                            self.wint=var
+
+                    #recht naar beneden controle
+                    if y<(self.boardBoxH-3) and x<(self.boardBoxW-3):
+
+                        if var==self.board[y+1][x+1] and var==self.board[y+2][x+2] and var==self.board[y+3][x+3]:
+                            self.wint=var
+
+                    #lings naar beneden controle
+                    if y<(self.boardBoxH-3) and x>2:
+
+                        if var==self.board[y+1][x-1] and var==self.board[y+2][x-2] and var==self.board[y+3][x-3]:
+                            self.wint=var
+
+    def drawBoard(self):
+
         #box laten vallen
         for x in range(self.boardBoxW):
             for y in range(self.boardBoxH-1):
@@ -88,13 +135,8 @@ class VierOpEenRijGame():
                     if self.board[y+1][x]==0:
                         self.board[y+1][x]=self.board[y][x]
                         self.board[y][x]=0
-        #update the screen
-        pygame.display.flip()
 
-
-
-    def drawBoard(self):
-        #teken veld
+        #bord tekenen
         for x in range(self.boardBoxW):
             for y in range(self.boardBoxH):
                 if self.board[y][x]==0:
