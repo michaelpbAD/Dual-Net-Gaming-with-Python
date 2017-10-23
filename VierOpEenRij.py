@@ -56,13 +56,15 @@ class VierOpEenRijGame():
         self.screen.fill((255,255,255))
         self.drawBoard()
 
+        #envents/key pres
         for event in pygame.event.get():
             #quit if the quit button was pressed
             if event.type == pygame.QUIT:
                 exit()
 
-            #pijl bewegen
+            #key pres
             if event.type == pygame.KEYDOWN :
+                #pijl bewegen
                 if event.key==pygame.K_LEFT:
                     if 0<self.pijlx:
                         self.pijlx -= 1
@@ -70,7 +72,7 @@ class VierOpEenRijGame():
                     if self.pijlx<(self.boardBoxW-1):
                         self.pijlx += 1
 
-                if event.key==pygame.K_KP_ENTER:
+                if event.key==pygame.K_KP_ENTER and self.board[0][self.pijlx]==0:
                     self.board[0][self.pijlx]=self.playerTurn
                     if self.playerTurn==1:
                         self.playerTurn=2
@@ -78,6 +80,14 @@ class VierOpEenRijGame():
                     elif self.playerTurn==2:
                         self.playerTurn=1
                         self.pijl=self.player1Box
+
+        #box laten vallen
+        for x in range(self.boardBoxW):
+            for y in range(self.boardBoxH-1):
+                if self.board[y][x]!=0:
+                    if self.board[y+1][x]==0:
+                        self.board[y+1][x]=self.board[y][x]
+                        self.board[y][x]=0
         #update the screen
         pygame.display.flip()
 
