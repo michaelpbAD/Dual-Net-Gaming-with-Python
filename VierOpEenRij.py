@@ -28,9 +28,19 @@ class VierOpEenRijGame():
         #defineer bord grote
         self.board = [[0 for x in range(self.boardBoxW)] for y in range(self.boardBoxH)]
 
-        self.pijl=self.greenBox
+        self.playerTurn=1
+
+        self.player1Box=self.greenBox
+        self.player2Box=self.bleuBox
+
+        if self.playerTurn==1:
+            self.pijl=self.player1Box
+        elif self.playerTurn==2:
+            self.pijl=self.player2Box
         self.pijlx=0
         self.pijly=0
+
+
 
 
     def initGraphics(self):
@@ -60,24 +70,32 @@ class VierOpEenRijGame():
                     if self.pijlx<(self.boardBoxW-1):
                         self.pijlx += 1
 
-        #plaats pijl
-        self.screen.blit(self.pijl,( (self.boxB*2)+((self.pijlx)*self.boxD)-self.boxB*self.pijlx, (self.boxB*2)+((self.pijly)*self.boxD)-self.boxB*self.pijly))
-
-
+                if event.key==pygame.K_KP_ENTER:
+                    self.board[0][self.pijlx]=self.playerTurn
+                    if self.playerTurn==1:
+                        self.playerTurn=2
+                        self.pijl=self.player2Box
+                    elif self.playerTurn==2:
+                        self.playerTurn=1
+                        self.pijl=self.player1Box
         #update the screen
         pygame.display.flip()
 
 
 
     def drawBoard(self):
+        #teken veld
         for x in range(self.boardBoxW):
             for y in range(self.boardBoxH):
                 if self.board[y][x]==0:
                     self.screen.blit(self.legeBox, [(self.boxB*2)+((x)*self.boxD)-self.boxB*x, self.boxD+(self.boxB*2)+((y)*self.boxD)-self.boxB*y])
                 if self.board[y][x]==1:
-                    self.screen.blit(self.greenBox, [(self.boxB*2)+((x)*self.boxD)-self.boxB*x, self.boxD+(self.boxB*2)+((y)*self.boxD)-self.boxB*y])
+                    self.screen.blit(self.player1Box, [(self.boxB*2)+((x)*self.boxD)-self.boxB*x, self.boxD+(self.boxB*2)+((y)*self.boxD)-self.boxB*y])
                 if self.board[y][x]==2:
-                    self.screen.blit(self.bleuBox, [(self.boxB*2)+((x)*self.boxD)-self.boxB*x, self.boxD+(self.boxB*2)+((y)*self.boxD)-self.boxB*y])
+                    self.screen.blit(self.player2Box, [(self.boxB*2)+((x)*self.boxD)-self.boxB*x, self.boxD+(self.boxB*2)+((y)*self.boxD)-self.boxB*y])
+
+        #plaats pijl
+        self.screen.blit(self.pijl,( (self.boxB*2)+((self.pijlx)*self.boxD)-self.boxB*self.pijlx, (self.boxB*2)+((self.pijly)*self.boxD)-self.boxB*self.pijly))
 
 
 bg=VierOpEenRijGame() #__init__ is called right here
