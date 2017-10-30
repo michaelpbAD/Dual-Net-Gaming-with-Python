@@ -12,7 +12,7 @@ class VierOpEenRijGame():
 
         #speel bord grote in voken
         self.boardBoxH=7
-        self.boardBoxW=7
+        self.boardBoxW=14
 
         #box dimensions and border
         self.boxD=50
@@ -43,38 +43,34 @@ class VierOpEenRijGame():
         #defineer bord grote
         self.board = [[0 for x in range(self.boardBoxW)] for y in range(self.boardBoxH)]
 
+        #aantal spelers
+        self.playerAantal=4
+
         #defineer wie start
         self.playerTurn=1
 
         #defineer spaeler naam
-        self.player1Naam="mic"
-        self.player2Naam="andre"
+        self.playerNaam=["mich","andre","hans","griet"]
 
         #defineer speler kleur
-        self.player1Box=self.greenBox
-        self.player2Box=self.bleuBox
+        self.playerBox=[self.greenBox,self.bleuBox,self.redBox,self.yellowBox]
 
         #defineer pijl
-        if self.playerTurn==1:
-            self.pijl=self.player1Box
-        elif self.playerTurn==2:
-            self.pijl=self.player2Box
+        self.pijl=self.playerBox[self.playerTurn-1]
         self.pijlx=0
         self.pijly=0
 
         #defineer scoren
-        self.scorePlayer1=0
-        self.scorePlayer2=0
+        self.scorePlayer=[0,0,0,0]
         self.wint=0
-
 
     def initGraphics(self):
         self.legeBox=pygame.transform.scale( pygame.image.load("legeBox.png"),(self.boxD,self.boxD))
         self.greenBox=pygame.transform.scale( pygame.image.load("greenBox.png"),(self.boxD,self.boxD))
         self.bleuBox=pygame.transform.scale( pygame.image.load("bleuBox.png"),(self.boxD,self.boxD))
+        self.redBox=pygame.transform.scale( pygame.image.load("redBox.png"),(self.boxD,self.boxD))
+        self.yellowBox=pygame.transform.scale( pygame.image.load("yellowBox.png"),(self.boxD,self.boxD))
         self.score_panel=pygame.transform.scale( pygame.image.load("score_panel.png"),(self.panelW,self.panelH))
-        self.redindicator=pygame.image.load("redindicator.png")
-        self.greenindicator=pygame.image.load("greenindicator.png")
 
     def update(self):
         #sleep to make the game 60 fps
@@ -83,7 +79,7 @@ class VierOpEenRijGame():
         #clear the screen
         self.screen.fill((255,255,255))
         self.drawBoard()
-        self.drawHUD()
+        self.drawPanel()
 
         #envents/key pres
         self.eventAndKeys()
@@ -91,6 +87,7 @@ class VierOpEenRijGame():
         #kontrole
         self.kontrole()
 
+        #vult bord op met winaars kleur
         if self.wint!=0:
             for x in range (self.boardBoxW):
                 self.board[0][x]=self.wint
@@ -117,12 +114,11 @@ class VierOpEenRijGame():
 
                 if (event.key==pygame.K_KP_ENTER or event.key==pygame.K_DOWN) and self.board[0][self.pijlx]==0:
                     self.board[0][self.pijlx]=self.playerTurn
-                    if self.playerTurn==1:
-                        self.playerTurn=2
-                        self.pijl=self.player2Box
-                    elif self.playerTurn==2:
+                    if self.playerAantal>self.playerTurn:
+                        self.playerTurn+=1
+                    else:
                         self.playerTurn=1
-                        self.pijl=self.player1Box
+                    self.pijl=self.playerBox[self.playerTurn-1]
 
     def kontrole(self):
         #kontrole gebeurt allen (y,x) (0,+),(+,0),(+,+),(+,-)
@@ -170,36 +166,33 @@ class VierOpEenRijGame():
             for y in range(self.boardBoxH):
                 if self.board[y][x]==0:
                     self.screen.blit(self.legeBox, [(self.boxB*2)+((x)*self.boxD)-self.boxB*x, self.boxD+(self.boxB*2)+((y)*self.boxD)-self.boxB*y])
-                if self.board[y][x]==1:
-                    self.screen.blit(self.player1Box, [(self.boxB*2)+((x)*self.boxD)-self.boxB*x, self.boxD+(self.boxB*2)+((y)*self.boxD)-self.boxB*y])
-                if self.board[y][x]==2:
-                    self.screen.blit(self.player2Box, [(self.boxB*2)+((x)*self.boxD)-self.boxB*x, self.boxD+(self.boxB*2)+((y)*self.boxD)-self.boxB*y])
+                if self.board[y][x]!=0:
+                    self.screen.blit(self.playerBox[self.board[y][x]-1], [(self.boxB*2)+((x)*self.boxD)-self.boxB*x, self.boxD+(self.boxB*2)+((y)*self.boxD)-self.boxB*y])
 
         #plaats pijl
         self.screen.blit(self.pijl,( (self.boxB*2)+((self.pijlx)*self.boxD)-self.boxB*self.pijlx, (self.boxB*2)+((self.pijly)*self.boxD)-self.boxB*self.pijly))
 
-    def drawHUD(self):
+    def drawPanel(self):
         panelP=self.height-self.panelH
 
-        #draw the background for the bottom:
-        self.screen.blit(self.score_panel, [0, panelP])
-        #create font
-        myfont32 = pygame.font.SysFont(None, 32)
-
-        #create text surface
-        label = myfont32.render("Your Turn:", 1, (255,255,255))
-
-        #draw surface
-        self.screen.blit(label, (10, panelP + 10))
-
-        self.screen.blit(self.greenindicator, (130, panelP))
+        #achtergrond paneel kleur of foto
+        #self.screen.blit(self.score_panel, [0, panelP])
+        pygame.draw.rect(self.screen,(0,0,0),[0,panelP,self.panelW,self.panelH])
 
         #print Player Score Labels
-        self.printPlayerScoreLabel (25,panelP+35,self.player1Box,self.player1Naam,self.scorePlayer1)
-        if (self.width/2)>300:
-            self.printPlayerScoreLabel ((self.width/2)+25,panelP+35,self.player2Box,self.player2Naam,self.scorePlayer2)
-        else:
-            self.printPlayerScoreLabel (25,panelP+70,self.player2Box,self.player2Naam,self.scorePlayer2)
+        x,y=0,panelP
+        for i in range(self.playerAantal):
+            if (self.width/2)>300:
+                if i%2==0:
+                    x=25
+                    y+=35
+                else :
+                    x=(self.width/2)+25
+            else:
+                x=25
+                y+=35
+            self.printPlayerScoreLabel (x,y,self.playerBox[i],self.playerNaam[i],self.scorePlayer[i])
+
 
     def printPlayerScoreLabel (self,x,y,icon,naam,score):
         myfont = pygame.font.SysFont(None, 42)
