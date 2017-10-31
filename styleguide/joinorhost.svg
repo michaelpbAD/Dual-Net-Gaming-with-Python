@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="224.55911mm"
+   height="224.5591mm"
+   viewBox="0 0 795.68189 795.68183"
+   id="svg4264"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="joinorhost.svg">
+  <defs
+     id="defs4266" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="266.20641"
+     inkscape:cy="298.98797"
+     inkscape:document-units="px"
+     inkscape:current-layer="g4323"
+     showgrid="false"
+     inkscape:window-width="959"
+     inkscape:window-height="1025"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata4269">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Laag 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(78.912361,-117.02122)">
+    <rect
+       style="fill:#009e60;fill-opacity:1;stroke:none;stroke-width:4.31799984;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4272"
+       width="795.68188"
+       height="795.68182"
+       x="-78.912361"
+       y="117.02122" />
+    <g
+       id="g4294"
+       transform="translate(42.500013,97.142859)">
+      <rect
+         y="576.13855"
+         x="142.34779"
+         height="85.304428"
+         width="268.16156"
+         id="rect4290"
+         style="fill:#00ffff;fill-opacity:1;stroke:#ffffff;stroke-width:3.98128486;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text4278"
+         y="628.07654"
+         x="160"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           y="628.07654"
+           x="160"
+           id="tspan4280"
+           sodipodi:role="line">Host Server</tspan></text>
+    </g>
+    <g
+       id="g4323"
+       transform="translate(138.3594,-141.42857)">
+      <text
+         sodipodi:linespacing="125%"
+         id="text4274"
+         y="465.21936"
+         x="1.4285614"
+         style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
+         xml:space="preserve"><tspan
+           y="465.21936"
+           x="1.4285614"
+           id="tspan4276"
+           sodipodi:role="line">IP-address server:</tspan></text>
+      <g
+         transform="translate(-679.43081,177.14286)"
+         id="g4299"
+         style="stroke:#000000;stroke-opacity:1;fill:#ffffff;fill-opacity:1">
+        <rect
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect4282"
+           width="220"
+           height="88.571426"
+           x="750"
+           y="395.21936" />
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
+           x="755.71429"
+           y="450.93362"
+           id="text4284"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan4286"
+             x="755.71429"
+             y="450.93362">Join server</tspan></text>
+      </g>
+      <path
+         inkscape:connector-curvature="0"
+         id="path4292"
+         d="m 17.712046,553.79078 325.714284,0"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="288.74304"
+       y="610.93365"
+       id="text4332"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4334"
+         x="288.74304"
+         y="610.93365">OR</tspan></text>
+  </g>
+</svg>
