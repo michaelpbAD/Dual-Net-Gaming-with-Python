@@ -1,4 +1,4 @@
-"""inlade"""
+""" Vier op een rij """
 import pygame
 
 class VierOpEenRijGame():
@@ -193,8 +193,7 @@ class VierOpEenRijGame():
                 y+=35
             self.printPlayerScoreLabel (x,y,self.playerBox[i],self.playerNaam[i],self.scorePlayer[i])
 
-
-    def printPlayerScoreLabel (self,x,y,icon,naam,score):
+    def printPlayerScoreLabel(self, x, y, icon, naam, score):
         myfont = pygame.font.SysFont(None, 42)
 
         fScore = myfont.render(str(score), 1, (255,255,255))

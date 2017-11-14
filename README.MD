@@ -16,5 +16,7 @@ Commit changes (with a meaninful title and description)
 
 # Dual gaming with Python
 We are going to make "VierOpEenRij" in python with following libraries:
-*   PodSixNet
-*   Pygame
+*   PodSixNet: https://github.com/chr15m/PodSixNet/tree/python3
+*   Pygame: http://pygame.org/news
+*   tkinter: https://wiki.python.org/moin/TkInter
+*   (pygame_textinput: https://github.com/Nearoo/pygame-text-input)
