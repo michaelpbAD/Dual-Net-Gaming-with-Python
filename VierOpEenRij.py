@@ -198,7 +198,3 @@ class VierOpEenRijGame():
         self.screen.blit(pygame.transform.scale(icon,(25,25)), (x,y))
         self.screen.blit(fNaam, (x+50, y))
         self.screen.blit(fScore, (x+250, y))
-
-bg=VierOpEenRijGame()  # init__ is called right here
-while 1:
-    bg.update()

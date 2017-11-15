@@ -5,7 +5,9 @@ from tkinter import ttk
 # import regex to search for IP adress
 import re
 import pygame
+from VierOpEenRij import *
 
+gstart=False
 # checking IP adress
 
 def checkIp(*args):
@@ -22,7 +24,11 @@ def checkIp(*args):
             print(matchIp.group())
             print("join server")
             # exec(open("./VierOpEenRij.py").read())  # experimental, not the right way
-            import VierOpEenRij
+
+            global bg
+            bg=VierOpEenRijGame()  # init__ is called right here
+            global gstart
+            gstart=True
 
 # checking if server can be hosted
 def hostServer(*args):
@@ -68,4 +74,7 @@ for child in mainframe.winfo_children():
 ip_entry.focus()
 
 # loop for GUI
-root.mainloop()
+while 1:
+    root.update()
+    if gstart==True:
+        bg.update()
