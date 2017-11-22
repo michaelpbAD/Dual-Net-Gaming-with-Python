@@ -18,5 +18,5 @@ Commit changes (with a meaninful title and description)
 We are going to make "VierOpEenRij" in python with following libraries:
 *   PodSixNet: https://github.com/chr15m/PodSixNet/tree/python3
 *   Pygame: http://pygame.org/news
-*   tkinter: https://wiki.python.org/moin/TkInter
+*   tkinter: https://wiki.python.org/moin/TkInter, http://www.tkdocs.com/tutorial/index.html
 *   (pygame_textinput: https://github.com/Nearoo/pygame-text-input)
