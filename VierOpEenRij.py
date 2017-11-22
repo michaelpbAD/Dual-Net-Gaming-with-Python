@@ -1,13 +1,15 @@
 """ Vier op een rij """
 import pygame
+from PodSixNet.Connection import ConnectionListener, connection
+from time import sleep
 
-class VierOpEenRijGame():
+class VierOpEenRijGame(ConnectionListener):
     def __init__(self):
         pass
 
         pygame.init()
         pygame.font.init()
-
+        self.stopped = False
         # dimensions tiles game board
         self.boardBoxH=7
         self.boardBoxW=14
@@ -60,6 +62,8 @@ class VierOpEenRijGame():
         self.pijlx=0
         self.pijly=0
 
+        self.Connect(("localhost", 31425))
+
     def initGraphics(self):
         self.legeBox=pygame.transform.scale( pygame.image.load("img/legeBox.png"),(self.boxD,self.boxD))
         self.greenBox=pygame.transform.scale( pygame.image.load("img/greenBox.png"),(self.boxD,self.boxD))
@@ -69,6 +73,8 @@ class VierOpEenRijGame():
         self.scorePanel=pygame.transform.scale( pygame.image.load("img/scorePanel.png"),(self.panelW,self.panelH))
 
     def update(self):
+        connection.Pump()
+        self.Pump()
         #sleep to make the game 60 fps
         self.clock.tick(60)
 
@@ -76,9 +82,6 @@ class VierOpEenRijGame():
         self.screen.fill((255,255,255))
         self.drawBoard()
         self.drawPanel()
-
-        # events/key pres
-        self.eventAndKeys()
 
         #kontrole
         self.controle()
@@ -91,12 +94,16 @@ class VierOpEenRijGame():
         #update the screen
         pygame.display.flip()
 
+        # events/key pres
+        self.eventAndKeys()
+
     def eventAndKeys(self):
         #envents/key pres
         for event in pygame.event.get():
             #quit if the quit button was pressed
             if event.type == pygame.QUIT:
-                exit()
+                self.stopped = True
+                pygame.display.quit()
 
             # key press
             if event.type == pygame.KEYDOWN:
@@ -198,3 +205,9 @@ class VierOpEenRijGame():
         self.screen.blit(pygame.transform.scale(icon,(25,25)), (x,y))
         self.screen.blit(fNaam, (x+50, y))
         self.screen.blit(fScore, (x+250, y))
+
+
+
+bg=VierOpEenRijGame()
+while 1:
+    bg.update()

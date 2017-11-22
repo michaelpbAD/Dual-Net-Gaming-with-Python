@@ -76,5 +76,5 @@ ip_entry.focus()
 # loop for GUI
 while 1:
     root.update()
-    if gstart==True:
+    if gstart==True and (not bg.stopped):
         bg.update()
