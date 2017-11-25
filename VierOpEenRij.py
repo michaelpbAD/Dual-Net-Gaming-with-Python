@@ -68,6 +68,24 @@ class VierOpEenRijGame(ConnectionListener):
 
         self.Connect(("192.168.1.77", 31425))
 
+        self.gameid = None
+        self.num = None
+
+        self.running=False
+        while not self.running:
+            self.Pump()
+            connection.Pump()
+            sleep(0.01)
+        #determine attributes from player #
+        if self.num==0:
+            self.turn=True
+            self.marker = self.greenplayer
+            self.othermarker = self.blueplayer
+        else:
+            self.turn=False
+            self.marker=self.blueplayer
+            self.othermarker = self.greenplayer
+
     def initGraphics(self):
         self.legeBox=pygame.transform.scale( pygame.image.load("img/legeBox.png"),(self.boxD,self.boxD))
         self.greenBox=pygame.transform.scale( pygame.image.load("img/greenBox.png"),(self.boxD,self.boxD))
@@ -115,9 +133,11 @@ class VierOpEenRijGame(ConnectionListener):
                 if event.key==pygame.K_LEFT:
                     if 0<self.pijlx:
                         self.pijlx -= 1
+                        self.Send({"action": "place","playerTurn":self.playerTurn, "pijlx":self.pijlx,"K_DOWN":False,"gameid": self.gameid, "num": self.num})
                 if event.key==pygame.K_RIGHT:
                     if self.pijlx<(self.boardBoxW-1):
                         self.pijlx += 1
+                        self.Send({"action": "place","playerTurn":self.playerTurn, "pijlx":self.pijlx,"K_DOWN":False,"gameid": self.gameid, "num": self.num})
 
                 if (event.key==pygame.K_KP_ENTER or event.key==pygame.K_DOWN) and self.board[0][self.pijlx]==0:
                     self.board[0][self.pijlx]=self.playerTurn
@@ -126,6 +146,7 @@ class VierOpEenRijGame(ConnectionListener):
                     else:
                         self.playerTurn=1
                     self.pijl=self.playerBox[self.playerTurn-1]
+                    self.Send({"action": "place","playerTurn":self.playerTurn, "pijlx":self.pijlx,"K_DOWN":True,"gameid": self.gameid, "num": self.num})
 
     def controle(self):
         # controle gebeurt alleen (y,x) (0,+),(+,0),(+,+),(+,-)
