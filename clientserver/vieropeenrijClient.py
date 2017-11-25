@@ -22,6 +22,11 @@ class MyNetworkListener(ConnectionListener):
 	def Network_myaction(data):
 		print ("myaction:", data)
 
+	def Network_startgame(self, data): #controleren
+	    self.running=True
+	    self.num=data["player"]
+	    self.gameid=data["gameid"]
+
 
 class MyPlayerListener(ConnectionListener):
 
