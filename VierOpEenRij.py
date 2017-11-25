@@ -66,7 +66,7 @@ class VierOpEenRijGame(ConnectionListener):
         self.dropTijdInit=1
         self.dropTijd=self.dropTijdInit
 
-        self.Connect(("172.72.192.180", 31425))
+        self.Connect(("192.168.1.77", 31425))
 
     def initGraphics(self):
         self.legeBox=pygame.transform.scale( pygame.image.load("img/legeBox.png"),(self.boxD,self.boxD))
@@ -158,7 +158,7 @@ class VierOpEenRijGame(ConnectionListener):
                             self.wint=var
 
     def drawBoard(self):
-        
+
         # drop box
         if self.dropTijd<=0:
             self.dropTijd=self.dropTijdInit
