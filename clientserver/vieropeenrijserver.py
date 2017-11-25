@@ -8,7 +8,7 @@ class ClientChannel(Channel):
 		print("")
 
 	def Network_place(self, data):
-		print("place:", data)
+		print(data)
 
 class vieropeenrijServer(Server):
 	def __init__(self, *args, **kwargs): #controleren
@@ -35,7 +35,7 @@ class vieropeenrijServer(Server):
 		    self.queue=None
 
 print("STARTING SERVER ON LOCALHOST")
-vieropenrijServer = vieropeenrijServer(localaddr=("172.72.192.180", 31425))
+vieropenrijServer = vieropeenrijServer(localaddr=("192.168.1.77", 31425))
 
 while 1:
 	vieropenrijServer.Pump()
