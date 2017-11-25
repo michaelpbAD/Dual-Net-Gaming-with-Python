@@ -62,7 +62,11 @@ class VierOpEenRijGame(ConnectionListener):
         self.pijlx=0
         self.pijly=0
 
-        self.Connect(("localhost", 31425))
+        #drop tijd
+        self.dropTijdInit=1
+        self.dropTijd=self.dropTijdInit
+
+        self.Connect(("172.72.192.180", 31425))
 
     def initGraphics(self):
         self.legeBox=pygame.transform.scale( pygame.image.load("img/legeBox.png"),(self.boxD,self.boxD))
@@ -154,14 +158,18 @@ class VierOpEenRijGame(ConnectionListener):
                             self.wint=var
 
     def drawBoard(self):
-        """ animatie? Andreas """
+        
         # drop box
-        for x in range(self.boardBoxW):
-            for y in range(self.boardBoxH-1):
-                if self.board[y][x]!=0:
-                    if self.board[y+1][x]==0:
-                        self.board[y+1][x]=self.board[y][x]
-                        self.board[y][x]=0
+        if self.dropTijd<=0:
+            self.dropTijd=self.dropTijdInit
+            for x in range(self.boardBoxW):
+                for y in range(self.boardBoxH-1-1,-1,-1):
+                    if self.board[y][x]!=0:
+                        if self.board[y+1][x]==0:
+                            self.board[y+1][x]=self.board[y][x]
+                            self.board[y][x]=0
+        else:
+            self.dropTijd-=1
 
         # draw game board
         for x in range(self.boardBoxW):
