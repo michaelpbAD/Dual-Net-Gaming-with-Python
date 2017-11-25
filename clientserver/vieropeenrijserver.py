@@ -4,10 +4,11 @@ from PodSixNet.Channel import Channel
 
 class ClientChannel(Channel):
 	def Network(self, data):
-		print(data)
+		#print(data)
+		print("")
 
-	# def Network_myaction(self, data):
-	# 	print("myaction:", data)
+	def Network_place(self, data):
+		print("place:", data)
 
 class vieropeenrijServer(Server):
 
@@ -17,7 +18,7 @@ class vieropeenrijServer(Server):
 		print('new connection:', channel)
 
 print("STARTING SERVER ON LOCALHOST")
-vieropenrijServer = vieropeenrijServer(localaddr=("localhost", 31425))
+vieropenrijServer = vieropeenrijServer(localaddr=("172.72.192.180", 31425))
 
 while 1:
 	vieropenrijServer.Pump()
