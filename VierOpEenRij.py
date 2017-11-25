@@ -77,11 +77,11 @@ class VierOpEenRijGame(ConnectionListener):
         self.scorePanel=pygame.transform.scale( pygame.image.load("img/scorePanel.png"),(self.panelW,self.panelH))
 
     def update(self):
+        connection.Send({"action": "place", "x":50, "y":20, "is_horizontal": True, "gameid": 50, "num": 40})
         connection.Pump()
         self.Pump()
         #sleep to make the game 60 fps
         self.clock.tick(60)
-
         #clear the screen
         self.screen.fill((255,255,255))
         self.drawBoard()
