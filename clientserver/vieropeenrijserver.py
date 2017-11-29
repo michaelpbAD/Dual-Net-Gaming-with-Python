@@ -12,7 +12,7 @@ class ClientChannel(Channel):
 
 class vieropeenrijServer(Server):
 	def __init__(self, *args, **kwargs): #controleren
-	    PodSixNet.Server.Server.__init__(self, *args, **kwargs)
+	    Server.__init__(self, *args, **kwargs)
 	    self.games = []
 	    self.queue = None
 	    self.currentIndex=0
@@ -34,12 +34,13 @@ class vieropeenrijServer(Server):
 		    self.games.append(self.queue)
 		    self.queue=None
 
-print("STARTING SERVER ON LOCALHOST")
-vieropenrijServer = vieropeenrijServer(localaddr=("192.168.1.77", 31425))
-
-while 1:
-	vieropenrijServer.Pump()
-	sleep(0.01)
+class servering():
+	def __init__(self):
+		print("STARTING SERVER ON LOCALHOST")
+		vieropenrijServer = vieropeenrijServer(localaddr=("localhost", 31425))
+	def update():
+		vieropenrijServer.Pump()
+		#sleep(0.01)
 #
 # def updateServer():
 #     print("Clock is ticking")

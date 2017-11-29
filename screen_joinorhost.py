@@ -13,6 +13,7 @@ class joinorhost():
         # root =
         self.root = Tk()
         self.root.title("Vier op een rij: Client or Server")  # title of window
+        self.screenServe = None
         mainframe = ttk.Frame(self.root, padding="80 80 80 80")  # padding of frame
         mainframe.grid(column=0, row=0, sticky=(N, W, E, S))  # grid layout
         mainframe.columnconfigure(0, weight=1)
@@ -47,6 +48,27 @@ class joinorhost():
         socketEntry.focus()
         # =============================== END FORM JOIN OR HOST =========================================
 
+    def joinServer(self):
+        check = self.checkSocket(self.socket.get())
+        nickname = self.nickname.get().strip()
+        print('"'+nickname +'"')
+        if check and nickname != "":
+            print("Joining server at: ", check)
+            ## vieropenrij game client
+        else:
+            messagebox.showerror("Spatienaam mag niet.")
+            return False
+
+    def hostServer(self):
+        check = self.checkSocket(self.socketServer.get())
+        if check:
+            print("Hosting server at: ", check)
+            print("Hello")
+            self.screenServe = screen_hostserver.screenServer()
+            ## vieropeenrij game server
+        else:
+            return False
+
     def checkSocket(self, socket):
         try:
             isIp, isPort = socket.split(":")
@@ -75,24 +97,6 @@ class joinorhost():
         print(self.socket.get())
         return [isIp, isPort]
 
-    def joinServer(self):
-        check = self.checkSocket(self.socket.get())
-        nickname = self.nickname.get().strip()
-        print('"'+nickname +'"')
-        if check and nickname != "":
-            print("Joining server at: ", check)
-        else:
-            return False
-
-    def hostServer(self):
-        check = self.checkSocket(self.socketServer.get())
-        if check:
-            print("Hosting server at: ", check)
-            self.screenServe = screen_hostserver.screenServer()
-        else:
-            return False
-
-
     # update GUI 1 time
     def update(self):
         self.root.update()
@@ -102,7 +106,6 @@ class joinorhost():
 joh = joinorhost()
 while 1:
     joh.update()
-    try:
+    if joh.screenServe != None:
         screenServe.update()
-    except:
-        screenServe = None
+        print("Hello")
