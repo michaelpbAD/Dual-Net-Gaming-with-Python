@@ -66,7 +66,7 @@ class VierOpEenRijGame(ConnectionListener):
         self.dropTijdInit=1
         self.dropTijd=self.dropTijdInit
 
-        self.Connect(("172.72.192.180", 31425))
+        self.Connect(("192.168.1.77", 31425))
 
         self.gameid = None
         self.num = None
