@@ -66,7 +66,7 @@ class VierOpEenRijGame(ConnectionListener):
         self.dropTijdInit=1
         self.dropTijd=self.dropTijdInit
 
-        self.Connect(("192.168.1.77", 31425))
+        self.Connect(("LOCALHOST", 31425))#controleren
 
         self.gameid = None
         self.num = None
@@ -95,6 +95,9 @@ class VierOpEenRijGame(ConnectionListener):
         self.scorePanel=pygame.transform.scale( pygame.image.load("img/scorePanel.png"),(self.panelW,self.panelH))
 
     def update(self):
+        connection.Pump()
+        self.Pump()
+
         connection.Send({"action": "place", "x":50, "y":20, "is_horizontal": True, "gameid": 50, "num": 40})
         connection.Pump()
         self.Pump()
