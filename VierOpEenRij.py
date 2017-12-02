@@ -4,9 +4,12 @@ from PodSixNet.Connection import ConnectionListener, connection
 from time import sleep
 
 class VierOpEenRijGame(ConnectionListener):
-    def __init__(self):
-        pass
+    def Network_startgame(self, data): #controleren
+        self.running=True
+        self.num=data["player"]
+        self.gameid=data["gameid"]
 
+    def __init__(self):
         pygame.init()
         pygame.font.init()
         self.stopped = False
@@ -42,7 +45,7 @@ class VierOpEenRijGame(ConnectionListener):
         self.board = [[0 for x in range(self.boardBoxW)] for y in range(self.boardBoxH)]
 
         # number of players
-        self.playerAantal=4
+        self.playerAantal=2
 
         # define who starts
         self.playerTurn=1
@@ -85,6 +88,9 @@ class VierOpEenRijGame(ConnectionListener):
             self.turn=False
             self.marker=self.blueplayer
             self.othermarker = self.greenplayer
+        self.playerNR=self.num+1
+
+
 
     def initGraphics(self):
         self.legeBox=pygame.transform.scale( pygame.image.load("img/legeBox.png"),(self.boxD,self.boxD))
@@ -98,9 +104,6 @@ class VierOpEenRijGame(ConnectionListener):
         connection.Pump()
         self.Pump()
 
-        connection.Send({"action": "place", "x":50, "y":20, "is_horizontal": True, "gameid": 50, "num": 40})
-        connection.Pump()
-        self.Pump()
         #sleep to make the game 60 fps
         self.clock.tick(60)
         #clear the screen
@@ -123,6 +126,8 @@ class VierOpEenRijGame(ConnectionListener):
         self.eventAndKeys()
 
     def eventAndKeys(self):
+        connection.Pump()
+        self.Pump()
         #envents/key pres
         for event in pygame.event.get():
             #quit if the quit button was pressed
@@ -131,16 +136,17 @@ class VierOpEenRijGame(ConnectionListener):
                 pygame.display.quit()
 
             # key press
-            if event.type == pygame.KEYDOWN:
+            if event.type == pygame.KEYDOWN & self.playerNR==self.playerTurn:
                 # pijl move
                 if event.key==pygame.K_LEFT:
                     if 0<self.pijlx:
                         self.pijlx -= 1
-                        self.Send({"action": "place","playerTurn":self.playerTurn, "pijlx":self.pijlx,"K_DOWN":False,"gameid": self.gameid, "num": self.num})
+                        connection.Send({"action": "place","playerTurn":self.playerTurn, "pijlx":self.pijlx,"K_DOWN":False,"gameid": self.gameid, "num": self.num})
+
                 if event.key==pygame.K_RIGHT:
                     if self.pijlx<(self.boardBoxW-1):
                         self.pijlx += 1
-                        self.Send({"action": "place","playerTurn":self.playerTurn, "pijlx":self.pijlx,"K_DOWN":False,"gameid": self.gameid, "num": self.num})
+                        connection.Send({"action": "place","playerTurn":self.playerTurn, "pijlx":self.pijlx,"K_DOWN":False,"gameid": self.gameid, "num": self.num})
 
                 if (event.key==pygame.K_KP_ENTER or event.key==pygame.K_DOWN) and self.board[0][self.pijlx]==0:
                     self.board[0][self.pijlx]=self.playerTurn
@@ -149,7 +155,7 @@ class VierOpEenRijGame(ConnectionListener):
                     else:
                         self.playerTurn=1
                     self.pijl=self.playerBox[self.playerTurn-1]
-                    self.Send({"action": "place","playerTurn":self.playerTurn, "pijlx":self.pijlx,"K_DOWN":True,"gameid": self.gameid, "num": self.num})
+                    connection.Send({"action": "place","playerTurn":self.playerTurn, "pijlx":self.pijlx,"K_DOWN":True,"gameid": self.gameid, "num": self.num})
 
     def controle(self):
         # controle gebeurt alleen (y,x) (0,+),(+,0),(+,+),(+,-)

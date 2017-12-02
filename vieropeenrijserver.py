@@ -6,21 +6,21 @@ class ClientChannel(Channel):
 	def Network(self, data):
 		print(data)
 
-	def Network_place(self, data):
-        #deconsolidate all of the data from the dictionary
-		playerTurn = data["playerTurn"]
-		pijlx = data["pijlx"]
-		K_DOWN = data["K_DOWN"]
-
-		num=data["num"]
-
-        #id of game given by server at start of game
-		self.gameid = data["gameid"]
-
-        #tells server to place line
-		self._server.placeLine(hv, x, y, data, self.gameid, num)
-	def Close(self):
-		self._server.close(self.gameid)
+	# def Network_place(self, data):
+    #     #deconsolidate all of the data from the dictionary
+	# 	playerTurn = data["playerTurn"]
+	# 	pijlx = data["pijlx"]
+	# 	K_DOWN = data["K_DOWN"]
+    #
+	# 	num=data["num"]
+    #
+    #     #id of game given by server at start of game
+	# 	self.gameid = data["gameid"]
+    #
+    #     #tells server to place line
+	# 	self._server.placeLine(hv, x, y, data, self.gameid, num)
+	# def Close(self):
+	# 	self._server.close(self.gameid)
 
 class vieropeenrijServer(Server):
 	def __init__(self, *args, **kwargs): #controleren
@@ -58,7 +58,7 @@ while 1:
 #     vieropenrijServer.Pump()
 #     sleep(0.0001)
 
-class Game(): #controleren
+class Game(object): #controleren
     def __init__(self, player0, currentIndex):
         # whose turn
         self.turn = 1
