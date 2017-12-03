@@ -45,17 +45,22 @@ class vieropeenrijServer(Server):
             self.queue = Game(channel, self.currentIndex)
         elif self.numPlayers == 2:
             channel.gameid = self.currentIndex
-            self.queue.player1 = channel
-        elif self.numPlayers == 3:
+            self.queue.player[1] = channel
+        elif self.numPlayers == 3 :
             channel.gameid = self.currentIndex
-            self.queue.player2 = channel
-        else:
+            self.queue.player[2] = channel
+        elif self.numPlayers == 4:
             channel.gameid = self.currentIndex
-            self.queue.player3 = channel
-            self.queue.player0.Send({"action": "startgame", "player": 0, "gameid": self.queue.gameid})
-            self.queue.player1.Send({"action": "startgame", "player": 1, "gameid": self.queue.gameid})
-            self.queue.player2.Send({"action": "startgame", "player": 2, "gameid": self.queue.gameid})
-            self.queue.player3.Send({"action": "startgame", "player": 3, "gameid": self.queue.gameid})
+            self.queue.player[3] = channel
+
+        if self.numPlayers >= self.queue.playerAantal:
+            for i in range(self.queue.playerAantal):
+                self.queue.player[i].Send({"action": "startgame", "player": i, "gameid": self.queue.gameid,"playerAantal": self.queue.playerAantal})
+
+            # self.queue.player0.Send({"action": "startgame", "player": 0, "gameid": self.queue.gameid})
+            # self.queue.player1.Send({"action": "startgame", "player": 1, "gameid": self.queue.gameid})
+            # self.queue.player2.Send({"action": "startgame", "player": 2, "gameid": self.queue.gameid})
+            # self.queue.player3.Send({"action": "startgame", "player": 3, "gameid": self.queue.gameid})
             self.games.append(self.queue)
             self.queue = None
 
@@ -69,13 +74,14 @@ class Game(object):  # controleren
     def __init__(self, player0, currentIndex):
         # whose turn
         self.Turn = 1
-        self.playerAantal = 4
+        self.playerAantal = 2
         # dimensions tiles game board
         self.boardBoxH = 7
         self.boardBoxW = 14
         # define game board dimensions
         self.board = [[0 for x in range(self.boardBoxW)] for y in range(self.boardBoxH)]
         # initialize the players including the one who started the game
+        self.player=[player0,None,None,None]
         self.player0 = player0
         self.player1 = None
         self.player2 = None

@@ -8,6 +8,7 @@ class VierOpEenRijGame(ConnectionListener):
         self.running=True
         self.num=data["player"]
         self.gameid=data["gameid"]
+        self.playerAantal = data["playerAantal"]
 
     def Network_place(self, data):
         #get attributes
@@ -54,15 +55,12 @@ class VierOpEenRijGame(ConnectionListener):
         # define game board dimensions
         self.board = [[0 for x in range(self.boardBoxW)] for y in range(self.boardBoxH)]
 
-        # number of players
-        self.playerAantal=4
-
         # define who starts
         self.playerTurn=1
 
         """ put this all in a dictionary? Andreas """
         #defineer spaeler naam
-        self.playerNaam=["speler1","speler2","speler3","speler4"]
+        self.playerNaam=["speler1", "speler2", "speler3", "speler4"]
         #defineer player color
         self.playerBox=[self.greenBox,self.blueBox,self.redBox,self.yellowBox]
         # define scores
