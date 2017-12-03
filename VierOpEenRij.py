@@ -9,6 +9,16 @@ class VierOpEenRijGame(ConnectionListener):
         self.num=data["player"]
         self.gameid=data["gameid"]
 
+    def Network_place(self, data):
+        #get attributes
+        self.pijlx = data["pijlx"]
+        K_DOWN=data["K_DOWN"]
+
+        if K_DOWN==True and self.board[0][self.pijlx]==0:
+            self.board[0][self.pijlx]=self.playerTurn
+            self.playerTurn=data["playerTurn"]
+            self.pijl=self.playerBox[self.playerTurn-1]
+
     def __init__(self):
         pygame.init()
         pygame.font.init()
@@ -52,7 +62,7 @@ class VierOpEenRijGame(ConnectionListener):
 
         """ put this all in a dictionary? Andreas """
         #defineer spaeler naam
-        self.playerNaam=["mich","andre","hans","griet"]
+        self.playerNaam=["speler1","speler2","speler3","speler4"]
         #defineer player color
         self.playerBox=[self.greenBox,self.blueBox,self.redBox,self.yellowBox]
         # define scores
@@ -66,8 +76,8 @@ class VierOpEenRijGame(ConnectionListener):
         self.pijly=0
 
         #drop tijd
-        self.dropTijdInit=1
-        self.dropTijd=self.dropTijdInit
+        # self.dropTijdInit=1
+        # self.dropTijd=self.dropTijdInit
 
         self.Connect(("LOCALHOST", 31425))#controleren
 
@@ -80,16 +90,16 @@ class VierOpEenRijGame(ConnectionListener):
             connection.Pump()
             sleep(0.01)
         #determine attributes from player #
-        if self.num==0:
-            self.turn=True
-            self.marker = self.greenplayer
-            self.othermarker = self.blueplayer
-        else:
-            self.turn=False
-            self.marker=self.blueplayer
-            self.othermarker = self.greenplayer
+        # if self.num==0:
+        #     self.turn=True
+        #     self.marker = self.greenplayer
+        #     self.othermarker = self.blueplayer
+        # else:
+        #     self.turn=False
+        #     self.marker=self.blueplayer
+        #     self.othermarker = self.greenplayer
         self.playerNR=self.num+1
-
+        self.playerNaam[self.num]="ik"
 
 
     def initGraphics(self):
@@ -136,26 +146,26 @@ class VierOpEenRijGame(ConnectionListener):
                 pygame.display.quit()
 
             # key press
-            if event.type == pygame.KEYDOWN & self.playerNR==self.playerTurn:
+            if event.type == pygame.KEYDOWN and self.playerNR==self.playerTurn:
                 # pijl move
                 if event.key==pygame.K_LEFT:
                     if 0<self.pijlx:
                         self.pijlx -= 1
-                        connection.Send({"action": "place","playerTurn":self.playerTurn, "pijlx":self.pijlx,"K_DOWN":False,"gameid": self.gameid, "num": self.num})
+                        connection.Send({"action": "place","playerTurn":self.playerTurn, "pijlx":self.pijlx,"K_DOWN":False,"gameid": self.gameid, "playerNR": self.playerNR})
 
                 if event.key==pygame.K_RIGHT:
                     if self.pijlx<(self.boardBoxW-1):
                         self.pijlx += 1
-                        connection.Send({"action": "place","playerTurn":self.playerTurn, "pijlx":self.pijlx,"K_DOWN":False,"gameid": self.gameid, "num": self.num})
+                        connection.Send({"action": "place","playerTurn":self.playerTurn, "pijlx":self.pijlx,"K_DOWN":False,"gameid": self.gameid, "playerNR": self.playerNR})
 
                 if (event.key==pygame.K_KP_ENTER or event.key==pygame.K_DOWN) and self.board[0][self.pijlx]==0:
-                    self.board[0][self.pijlx]=self.playerTurn
-                    if self.playerAantal>self.playerTurn:
-                        self.playerTurn+=1
-                    else:
-                        self.playerTurn=1
-                    self.pijl=self.playerBox[self.playerTurn-1]
-                    connection.Send({"action": "place","playerTurn":self.playerTurn, "pijlx":self.pijlx,"K_DOWN":True,"gameid": self.gameid, "num": self.num})
+                    # self.board[0][self.pijlx]=self.playerTurn
+                    # if self.playerAantal>self.playerTurn:
+                    #     self.playerTurn+=1
+                    # else:
+                    #     self.playerTurn=1
+                    # self.pijl=self.playerBox[self.playerTurn-1]
+                    connection.Send({"action": "place","playerTurn":self.playerTurn, "pijlx":self.pijlx,"K_DOWN":True,"gameid": self.gameid, "playerNR": self.playerNR})
 
     def controle(self):
         # controle gebeurt alleen (y,x) (0,+),(+,0),(+,+),(+,-)
@@ -190,16 +200,16 @@ class VierOpEenRijGame(ConnectionListener):
     def drawBoard(self):
 
         # drop box
-        if self.dropTijd<=0:
-            self.dropTijd=self.dropTijdInit
-            for x in range(self.boardBoxW):
-                for y in range(self.boardBoxH-1-1,-1,-1):
-                    if self.board[y][x]!=0:
-                        if self.board[y+1][x]==0:
-                            self.board[y+1][x]=self.board[y][x]
-                            self.board[y][x]=0
-        else:
-            self.dropTijd-=1
+        # if self.dropTijd<=0:
+        #     self.dropTijd=self.dropTijdInit
+        for x in range(self.boardBoxW):
+            for y in range(self.boardBoxH-1):
+                if self.board[y][x]!=0:
+                    if self.board[y+1][x]==0:
+                        self.board[y+1][x]=self.board[y][x]
+                        self.board[y][x]=0
+        # else:
+        #     self.dropTijd-=1
 
         # draw game board
         for x in range(self.boardBoxW):
