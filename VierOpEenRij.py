@@ -55,7 +55,7 @@ class VierOpEenRijGame(ConnectionListener):
         self.board = [[0 for x in range(self.boardBoxW)] for y in range(self.boardBoxH)]
 
         # number of players
-        self.playerAantal=2
+        self.playerAantal=4
 
         # define who starts
         self.playerTurn=1
