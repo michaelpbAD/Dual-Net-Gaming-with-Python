@@ -143,8 +143,6 @@ class VierOpEenRijGame(ConnectionListener):
         self.eventAndKeys()
 
     def eventAndKeys(self):
-        # connection.Pump()
-        # self.Pump()
         # envents/key pres
         for event in pygame.event.get():
             # quit if the quit button was pressed
@@ -173,33 +171,6 @@ class VierOpEenRijGame(ConnectionListener):
                     connection.Send(
                         {"action": "place", "playerTurn": self.playerTurn, "pijlx": self.pijlx, "K_DOWN": True,
                          "gameid": self.gameid, "playerNR": self.playerNR})
-
-    def controle(self):
-        # controle gebeurt alleen (y,x) (0,+),(+,0),(+,+),(+,-)
-        for y in range(self.boardBoxH):
-            for x in range(self.boardBoxW):
-                if self.board[y][x] != 0:
-                    var = self.board[y][x]
-                    # horizontale controle
-                    if x < (self.boardBoxW - 3):
-                        if var == self.board[y][x + 1] and var == self.board[y][x + 2] and var == self.board[y][x + 3]:
-                            self.wint = var
-
-                    # verticale controle
-                    if y < (self.boardBoxH - 3):
-                        if var == self.board[y + 1][x] and var == self.board[y + 2][x] and var == self.board[y + 3][x]:
-                            self.wint = var
-
-                    # rechts naar beneden controle
-                    if y < (self.boardBoxH - 3) and x < (self.boardBoxW - 3):
-                        if var == self.board[y + 1][x + 1] and var == self.board[y + 2][x + 2] and var == self.board[y + 3][x + 3]:
-                            self.wint = var
-
-                    # links naar beneden controle
-                    if y < (self.boardBoxH - 3) and x > 2:
-
-                        if var == self.board[y + 1][x - 1] and var == self.board[y + 2][x - 2] and var == self.board[y + 3][x - 3]:
-                            self.wint = var
 
     def drawBoard(self):
 
