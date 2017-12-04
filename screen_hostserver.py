@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import ttk
-import clientserver.vieropeenrijserver
+import vieropeenrijserver
 
 class screenServer():
     def __init__(self):
