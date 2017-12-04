@@ -4,7 +4,7 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
 import re
-import screen_hostserver
+#import screen_hostserver
 
 # checking IP adress
 class joinorhost():
@@ -13,6 +13,7 @@ class joinorhost():
         # root =
         self.root = Tk()
         self.root.title("Vier op een rij: Client or Server")  # title of window
+        self.screenServe = None
         mainframe = ttk.Frame(self.root, padding="80 80 80 80")  # padding of frame
         mainframe.grid(column=0, row=0, sticky=(N, W, E, S))  # grid layout
         mainframe.columnconfigure(0, weight=1)
@@ -47,6 +48,27 @@ class joinorhost():
         socketEntry.focus()
         # =============================== END FORM JOIN OR HOST =========================================
 
+    def joinServer(self):
+        check = self.checkSocket(self.socket.get())
+        nickname = self.nickname.get().strip()
+        print('"'+nickname +'"')
+        if not(check and nickname != ""):
+            messagebox.showerror("Error","Spatienaam mag niet.")
+            return False
+        else:
+            #join server
+            print("Joining server at: "+check[0]+" , "+check[1] +" as "+nickname)
+
+
+    def hostServer(self):
+        check = self.checkSocket(self.socketServer.get())
+        if check:
+            print("Hosting server at: ", check)
+            #self.screenServe = screen_hostserver.screenServer()
+            # vieropeenrij game server
+        else:
+            return False
+
     def checkSocket(self, socket):
         try:
             isIp, isPort = socket.split(":")
@@ -55,43 +77,26 @@ class joinorhost():
             return False
         #print(isIp + " : " + str(len(isIp)))
         if len(isIp) < 8 or len(isIp) > 15:
-            messagebox.showerror("This is not an IP address.")  # need to generate error
+            messagebox.showerror("Error","This is not an IP address.")
             return False
         else:
             patIp = re.compile(r'\d{2,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}')
             matchIp = patIp.search(isIp)
             if matchIp == None or matchIp.group() != isIp:
-                messagebox.showerror("This is not a right address")
+                messagebox.showerror("Error","This is not a right IP-address.")
                 return False
         try:
             # negatief getal wordt omgzet naar abs
-            isPort = abs(int(isPort))
-            print(isPort)
+            if int(isPort) != abs(int(isPort)):
+                messagebox.showerror("Error","Not a valid port.")
+                return False
         except:
-            messagebox.showerror("Not a valid port.")
+            messagebox.showerror("Error","Not a valid port.")
             return False
 
-        print(matchIp.group())
-        print(self.socket.get())
+        #print(matchIp.group())
+        #print(self.socket.get())
         return [isIp, isPort]
-
-    def joinServer(self):
-        check = self.checkSocket(self.socket.get())
-        nickname = self.nickname.get().strip()
-        print('"'+nickname +'"')
-        if check and nickname != "":
-            print("Joining server at: ", check)
-        else:
-            return False
-
-    def hostServer(self):
-        check = self.checkSocket(self.socketServer.get())
-        if check:
-            print("Hosting server at: ", check)
-            self.screenServe = screen_hostserver.screenServer()
-        else:
-            return False
-
 
     # update GUI 1 time
     def update(self):
@@ -102,7 +107,6 @@ class joinorhost():
 joh = joinorhost()
 while 1:
     joh.update()
-    try:
+    if joh.screenServe != None:
         screenServe.update()
-    except:
-        screenServe = None
+        print("Hello")

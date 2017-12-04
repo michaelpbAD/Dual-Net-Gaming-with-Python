@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+import vieropeenrijserver
 
 class screenServer():
     def __init__(self):
@@ -11,8 +12,10 @@ class screenServer():
         serverframe.columnconfigure(0, weight=1)
         serverframe.rowconfigure(0, weight=1)
         ttk.Label(serverframe, text="Running the server...").grid(column=2, row=1, sticky=(W, E))
+        ### server has to be started here
+        hosting = clientserver.vieropeenrijserver.servering()
 
     def update():
         self.root.update()
-
-    ### server has to be called here
+        ### server has to be updated here
+        self.hosting.update()

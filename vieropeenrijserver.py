@@ -46,7 +46,7 @@ class vieropeenrijServer(Server):
         elif self.numPlayers == 2:
             channel.gameid = self.currentIndex
             self.queue.player[1] = channel
-        elif self.numPlayers == 3 :
+        elif self.numPlayers == 3:
             channel.gameid = self.currentIndex
             self.queue.player[2] = channel
         elif self.numPlayers == 4:
@@ -55,19 +55,37 @@ class vieropeenrijServer(Server):
 
         if self.numPlayers >= self.queue.playerAantal:
             for i in range(self.queue.playerAantal):
-                self.queue.player[i].Send({"action": "startgame", "player": i, "gameid": self.queue.gameid,"playerAantal": self.queue.playerAantal})
+                self.queue.player[i].Send({"action": "startgame", "player": i, "gameid": self.queue.gameid,
+                                           "playerAantal": self.queue.playerAantal})
 
-            # self.queue.player0.Send({"action": "startgame", "player": 0, "gameid": self.queue.gameid})
-            # self.queue.player1.Send({"action": "startgame", "player": 1, "gameid": self.queue.gameid})
-            # self.queue.player2.Send({"action": "startgame", "player": 2, "gameid": self.queue.gameid})
-            # self.queue.player3.Send({"action": "startgame", "player": 3, "gameid": self.queue.gameid})
             self.games.append(self.queue)
             self.queue = None
+            self.numPlayers=0
 
     def placeLine(self, playerTurn, pijlx, K_DOWN, data, gameid, playerNR):
         game = [a for a in self.games if a.gameid == gameid]
         if len(game) == 1:
             game[0].placeLine(playerTurn, pijlx, K_DOWN, data, playerNR)
+
+    def tick(self):
+        for game in self.games:
+            if game.wint != 0:
+                game.wint = 0
+                game.Turn = 1
+                game.board = [[0 for x in range(game.boardBoxW)] for y in range(game.boardBoxH)]
+                sleep(2)
+                for i in range(game.playerAantal):
+                    game.player[i].Send(
+                        {"action": "boardWipe", "board": game.board, "playerTurn": game.Turn, "wint": game.wint})
+        self.Pump()
+
+    def close(self, gameid):
+        try:
+            game = [a for a in self.games if a.gameid == gameid][0]
+            for i in range(game.playerAantal):
+                game.player[i].Send({"action": "close"})
+        except:
+            pass
 
 
 class Game(object):  # controleren
@@ -81,11 +99,9 @@ class Game(object):  # controleren
         # define game board dimensions
         self.board = [[0 for x in range(self.boardBoxW)] for y in range(self.boardBoxH)]
         # initialize the players including the one who started the game
-        self.player=[player0,None,None,None]
-        self.player0 = player0
-        self.player1 = None
-        self.player2 = None
-        self.player3 = None
+        self.player = [player0, None, None, None]
+        self.scorePlayer = [0, 0, 0, 0]
+        self.wint = 0
 
         # gameid of game
         self.gameid = currentIndex
@@ -93,29 +109,74 @@ class Game(object):  # controleren
     def placeLine(self, playerTurn, pijlx, K_DOWN, data, playerNR):
         # make sure it's their turn
         if playerNR == self.Turn:
-            if K_DOWN == True:
-                #  and self.board[0][pijlx]==0:
-                # self.board[0][pijlx]=self.playerTurn
+            if K_DOWN == True and self.board[0][pijlx] == 0:
+                # plaats box
+                self.board[0][pijlx] = self.Turn
+                # volgende speler
                 if self.playerAantal > self.Turn:
                     self.Turn += 1
                 else:
                     self.Turn = 1
-                # self.Turn=playerTurn
                 data["playerTurn"] = self.Turn
         # send data and turn data to each player
-        self.player0.Send(data)
-        self.player1.Send(data)
-        self.player2.Send(data)
-        self.player3.Send(data)
+        for i in range(self.playerAantal):
+            self.player[i].Send(data)
+
+        self.dropBox()
+        self.controle()
+        if self.wint != 0:
+            self.scorePlayer[self.wint - 1] += 1
+            for i in range(self.playerAantal):
+                self.player[i].Send({"action": "win", "speler": self.wint, "score": self.scorePlayer})
+
+    def dropBox(self):
+        for x in range(self.boardBoxW):
+            for y in range(self.boardBoxH - 1):
+                if self.board[y][x] != 0:
+                    if self.board[y + 1][x] == 0:
+                        self.board[y + 1][x] = self.board[y][x]
+                        self.board[y][x] = 0
+
+    def controle(self):
+        # controle gebeurt alleen (y,x) (0,+),(+,0),(+,+),(+,-)
+        for y in range(self.boardBoxH):
+            for x in range(self.boardBoxW):
+                if self.board[y][x] != 0:
+                    var = self.board[y][x]
+                    # horizontale controle
+                    if x < (self.boardBoxW - 3):
+                        if var == self.board[y][x + 1] and var == self.board[y][x + 2] and var == self.board[y][x + 3]:
+                            self.wint = var
+
+                    # verticale controle
+                    if y < (self.boardBoxH - 3):
+                        if var == self.board[y + 1][x] and var == self.board[y + 2][x] and var == self.board[y + 3][x]:
+                            self.wint = var
+
+                    # rechts naar beneden controle
+                    if y < (self.boardBoxH - 3) and x < (self.boardBoxW - 3):
+                        if var == self.board[y + 1][x + 1] and var == self.board[y + 2][x + 2] and var == \
+                                self.board[y + 3][x + 3]:
+                            self.wint = var
+
+                    # links naar beneden controle
+                    if y < (self.boardBoxH - 3) and x > 2:
+
+                        if var == self.board[y + 1][x - 1] and var == self.board[y + 2][x - 2] and var == \
+                                self.board[y + 3][x - 3]:
+                            self.wint = var
 
 
 print("STARTING SERVER ON LOCALHOST")
 vieropenrijServer = vieropeenrijServer(localaddr=("LOCALHOST", 31425))
 
+
 while 1:
     vieropenrijServer.Pump()
     sleep(0.01)
-#
+    vieropenrijServer.tick()
+
+
 # def updateServer():
 #     print("Clock is ticking")
 #     vieropenrijServer.Pump()
