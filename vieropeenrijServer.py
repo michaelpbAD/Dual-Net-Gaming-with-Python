@@ -107,13 +107,14 @@ class Game:  # controleren
 
 
 print("STARTING SERVER ON LOCALHOST")
-vieropenrijServer = vieropeenrijServer(localaddr=("LOCALHOST", 31425))
+server = vieropeenrijServer(localaddr=("LOCALHOST", 31425))
 
 while 1:
-    vieropenrijServer.Pump()
+    server.Pump()
     sleep(0.01)
-#
-# def updateServer():
-#     print("Clock is ticking")
-#     vieropenrijServer.Pump()
-#     sleep(0.0001)
+
+
+ # def updateServer():
+ #    print("Clock is ticking")
+ #    vieropenrijServer.Pump()
+ #    sleep(0.0001)
