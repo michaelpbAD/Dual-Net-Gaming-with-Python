@@ -167,14 +167,14 @@ class Game(object):  # controleren
                             self.wint = var
 
 
-print("STARTING SERVER ON LOCALHOST")
-vieropenrijServer = vieropeenrijServer(localaddr=("LOCALHOST", 31425))
+##print("STARTING SERVER ON LOCALHOST")
+#vieropenrijServer = vieropeenrijServer(localaddr=("LOCALHOST", 31425))
 
 
-while 1:
-    vieropenrijServer.Pump()
-    sleep(0.01)
-    vieropenrijServer.tick()
+# def updateVierServer():
+#     vieropenrijServer.Pump()
+#     sleep(0.01)
+#     vieropenrijServer.tick()
 
 
 # def updateServer():

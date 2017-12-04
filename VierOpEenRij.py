@@ -45,7 +45,7 @@ class VierOpEenRijGame(ConnectionListener):
         self.playerTurn = data["playerTurn"]
         self.pijl = self.playerBox[self.playerTurn - 1]
 
-    def __init__(self):
+    def __init__(self, socket, nickname):
         pygame.init()
         pygame.font.init()
         self.stopped = False
@@ -98,7 +98,7 @@ class VierOpEenRijGame(ConnectionListener):
         self.pijlx = 0
         self.pijly = 0
 
-        self.Connect(("LOCALHOST", 31425))  # controleren
+        self.Connect((socket[0], int(socket[1])))  # controleren
 
         self.gameid = None
         self.num = None
@@ -110,7 +110,7 @@ class VierOpEenRijGame(ConnectionListener):
             sleep(0.01)
         # determine attributes from player #
         self.playerNR = self.num + 1
-        self.playerNaam[self.num] = "ik"
+        self.playerNaam[self.num] = nickname
 
     def initGraphics(self):
         self.legeBox = pygame.transform.scale(pygame.image.load("img/legeBox.png"), (self.boxD, self.boxD))
@@ -230,6 +230,6 @@ class VierOpEenRijGame(ConnectionListener):
         self.screen.blit(fScore, (x + 250, y))
 
 
-bg = VierOpEenRijGame()
-while 1:
-    bg.update()
+# bg = VierOpEenRijGame()
+# while 1:
+#     bg.update()

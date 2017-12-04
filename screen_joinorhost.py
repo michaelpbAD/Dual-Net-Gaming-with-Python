@@ -15,6 +15,8 @@ class joinorhost():
         # title of window
         self.root.title("Vier op een rij: Client or Server")
         self.hostS = None
+        self.playVierOpEenRij = None
+
         mainframe = ttk.Frame(self.root, padding="80 80 80 80")  # padding of frame
         mainframe.grid(column=0, row=0, sticky=(N, W, E, S))  # grid layout
         mainframe.columnconfigure(0, weight=1)
@@ -59,13 +61,15 @@ class joinorhost():
         else:
             #join server vieropeenrij game
             print("Joining server at: "+check[0]+" , "+check[1] +" as "+nickname)
+            import VierOpEenRij
+            self.playVierOpEenRij = VierOpEenRij.VierOpEenRijGame(check, nickname)
 
     def hostServer(self):
         check = self.checkSocket(self.socketServer.get())
         if check:
             # hosting the server
             print("Hosting server at: ", check)
-            self.hostS = screen_hostserver.screenServer()
+            self.hostS = screen_hostserver.screenServer(check)
         else:
             return False
 
@@ -99,7 +103,9 @@ class joinorhost():
     def update(self):
         self.root.update()
         if self.hostS != None:
-            self.hostS.update
+            self.hostS.update()
+        if self.playVierOpEenRij != None:
+            self.playVierOpEenRij.update()
 
 # # TESTING PURPOSES
 # joh = joinorhost()
