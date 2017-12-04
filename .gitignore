@@ -2,4 +2,4 @@ __pycache__/
 PodSixNet/__pycache__
 PodSixNet/*.pyc
 
-\.idea/
+.idea/*
