@@ -6,6 +6,18 @@ from time import sleep
 class VierOpEenRijGame(ConnectionListener):
     def Network_close(self, data):
         exit()
+
+    def Network_connected(self, data):
+        print("Connected to the server")
+
+    def Network_error(self, data):
+        print("Error connecting to Server.")
+        exit()
+
+    def Network_disconnected(self, data):
+        print("disconnected from the server")
+        exit()
+
     def Network_startgame(self, data):
         self.running=True
         self.num=data["player"]
@@ -21,10 +33,6 @@ class VierOpEenRijGame(ConnectionListener):
             self.board[0][self.pijlx]=self.playerTurn
             self.playerTurn=data["playerTurn"]
             self.pijl=self.playerBox[self.playerTurn-1]
-
-    def Network_yourturn(self, data):
-        #torf = short for true or false
-        self.turn = data["torf"]
 
     def __init__(self):
         pygame.init()
@@ -75,15 +83,11 @@ class VierOpEenRijGame(ConnectionListener):
         self.pijlx=0
         self.pijly=0
 
-        #drop tijd
-        # self.dropTijdInit=1
-        # self.dropTijd=self.dropTijdInit
-
         # try to connect to server
         try:
             self.Connect(("LOCALHOST", 31425))
         except:
-            print("Error connecting to Server")
+            print("Error connecting to Server.")
             exit()
 
         self.gameid = None
@@ -138,29 +142,24 @@ class VierOpEenRijGame(ConnectionListener):
         self.eventAndKeys()
 
     def eventAndKeys(self):
-
         #events and key press
         for event in pygame.event.get():
             #quit if the quit button was pressed
             if event.type == pygame.QUIT:
                 self.stopped = True
                 pygame.display.quit()
-            # key press
+            # key press and your turn?
             if event.type == pygame.KEYDOWN and self.playerNR==self.playerTurn:
-                # pijl move
-                if event.key==pygame.K_LEFT:
-                    if 0<self.pijlx:
-                        self.pijlx -= 1
-                        connection.Send({"action": "movePijl", "pijlx":self.pijlx,"gameid": self.gameid})
-
-                if event.key==pygame.K_RIGHT:
-                    if self.pijlx<(self.boardBoxW-1):
-                        self.pijlx += 1
-                        connection.Send({"action": "movePijl", "pijlx":self.pijlx,"gameid": self.gameid})
-
+                # pijl move left
+                if event.key==pygame.K_LEFT and 0<self.pijlx:
+                    self.pijlx -= 1
+                    connection.Send({"action": "movePijl", "pijlx":self.pijlx,"gameid": self.gameid})
+                # pijl move right
+                if event.key==pygame.K_RIGHT and self.pijlx<(self.boardBoxW-1):
+                    self.pijlx += 1
+                    connection.Send({"action": "movePijl", "pijlx":self.pijlx,"gameid": self.gameid})
+                # place box
                 if (event.key==pygame.K_KP_ENTER or event.key==pygame.K_DOWN) and self.board[0][self.pijlx]==0:
-                    #self.board[0][self.pijlx]=self.playerTurn
-                    self.pijl=self.playerBox[self.playerTurn-1]
                     connection.Send({"action": "placeBox","playerTurn":self.playerTurn, "pijlx":self.pijlx,"gameid": self.gameid, "playerNR": self.playerNR})
 
     def controle(self):
@@ -174,38 +173,26 @@ class VierOpEenRijGame(ConnectionListener):
 
                         if var==self.board[y][x+1] and var==self.board[y][x+2] and var==self.board[y][x+3]:
                             self.wint=var
-
                     # verticale controle
                     if y<(self.boardBoxH-3):
-
                         if var==self.board[y+1][x] and var==self.board[y+2][x] and var==self.board[y+3][x]:
                             self.wint=var
-
                     # rechts naar beneden controle
                     if y<(self.boardBoxH-3) and x<(self.boardBoxW-3):
-
                         if var==self.board[y+1][x+1] and var==self.board[y+2][x+2] and var==self.board[y+3][x+3]:
                             self.wint=var
-
                     # links naar beneden controle
                     if y<(self.boardBoxH-3) and x>2:
-
                         if var==self.board[y+1][x-1] and var==self.board[y+2][x-2] and var==self.board[y+3][x-3]:
                             self.wint=var
 
     def drawBoard(self):
-        # drop box
-        # if self.dropTijd<=0:
-        #     self.dropTijd=self.dropTijdInit
         for x in range(self.boardBoxW):
             for y in range(self.boardBoxH-1):
                 if self.board[y][x]!=0:
                     if self.board[y+1][x]==0:
                         self.board[y+1][x]=self.board[y][x]
                         self.board[y][x]=0
-        # else:
-        #     self.dropTijd-=1
-
         # draw game board
         for x in range(self.boardBoxW):
             for y in range(self.boardBoxH):
