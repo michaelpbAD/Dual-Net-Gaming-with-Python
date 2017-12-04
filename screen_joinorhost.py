@@ -4,7 +4,7 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
 import re
-#import screen_hostserver
+import screen_hostserver
 
 # checking IP adress
 class joinorhost():
@@ -12,8 +12,9 @@ class joinorhost():
         # =============================== START FORM JOIN OR HOST =========================================
         # root =
         self.root = Tk()
-        self.root.title("Vier op een rij: Client or Server")  # title of window
-        self.screenServe = None
+        # title of window
+        self.root.title("Vier op een rij: Client or Server")
+        self.hostS = None
         mainframe = ttk.Frame(self.root, padding="80 80 80 80")  # padding of frame
         mainframe.grid(column=0, row=0, sticky=(N, W, E, S))  # grid layout
         mainframe.columnconfigure(0, weight=1)
@@ -56,16 +57,15 @@ class joinorhost():
             messagebox.showerror("Error","Spatienaam mag niet.")
             return False
         else:
-            #join server
+            #join server vieropeenrij game
             print("Joining server at: "+check[0]+" , "+check[1] +" as "+nickname)
-
 
     def hostServer(self):
         check = self.checkSocket(self.socketServer.get())
         if check:
+            # hosting the server
             print("Hosting server at: ", check)
-            #self.screenServe = screen_hostserver.screenServer()
-            # vieropeenrij game server
+            self.hostS = screen_hostserver.screenServer()
         else:
             return False
 
@@ -75,7 +75,6 @@ class joinorhost():
         except:
             messagebox.showerror("Error","Format is IP:Port")
             return False
-        #print(isIp + " : " + str(len(isIp)))
         if len(isIp) < 8 or len(isIp) > 15:
             messagebox.showerror("Error","This is not an IP address.")
             return False
@@ -94,19 +93,15 @@ class joinorhost():
             messagebox.showerror("Error","Not a valid port.")
             return False
 
-        #print(matchIp.group())
-        #print(self.socket.get())
         return [isIp, isPort]
 
     # update GUI 1 time
     def update(self):
         self.root.update()
+        if self.hostS != None:
+            self.hostS.update
 
-
-# TESTING PURPOSES
-joh = joinorhost()
-while 1:
-    joh.update()
-    if joh.screenServe != None:
-        screenServe.update()
-        print("Hello")
+# # TESTING PURPOSES
+# joh = joinorhost()
+# while 1:
+#     joh.update()
