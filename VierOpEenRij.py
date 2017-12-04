@@ -4,21 +4,27 @@ from PodSixNet.Connection import ConnectionListener, connection
 from time import sleep
 
 class VierOpEenRijGame(ConnectionListener):
-    def Network_startgame(self, data): #controleren
+    def Network_close(self, data):
+        exit()
+    def Network_startgame(self, data):
         self.running=True
         self.num=data["player"]
         self.gameid=data["gameid"]
         self.playerAantal = data["playerAantal"]
 
-    def Network_place(self, data):
+    def Network_movePijl(self, data):
         #get attributes
         self.pijlx = data["pijlx"]
-        K_DOWN=data["K_DOWN"]
 
-        if K_DOWN==True and self.board[0][self.pijlx]==0:
+    def Network_placeBox(self,data):
+        if self.board[0][self.pijlx]==0:
             self.board[0][self.pijlx]=self.playerTurn
             self.playerTurn=data["playerTurn"]
             self.pijl=self.playerBox[self.playerTurn-1]
+
+    def Network_yourturn(self, data):
+        #torf = short for true or false
+        self.turn = data["torf"]
 
     def __init__(self):
         pygame.init()
@@ -57,8 +63,6 @@ class VierOpEenRijGame(ConnectionListener):
 
         # define who starts
         self.playerTurn=1
-
-        """ put this all in a dictionary? Andreas """
         #defineer spaeler naam
         self.playerNaam=["speler1", "speler2", "speler3", "speler4"]
         #defineer player color
@@ -66,9 +70,7 @@ class VierOpEenRijGame(ConnectionListener):
         # define scores
         self.scorePlayer=[0,0,0,0]
         self.wint=0
-        """ end dictionary"""
-
-        # define pijl (?)
+        # define pijl
         self.pijl=self.playerBox[self.playerTurn-1]
         self.pijlx=0
         self.pijly=0
@@ -77,7 +79,12 @@ class VierOpEenRijGame(ConnectionListener):
         # self.dropTijdInit=1
         # self.dropTijd=self.dropTijdInit
 
-        self.Connect(("LOCALHOST", 31425))#controleren
+        # try to connect to server
+        try:
+            self.Connect(("LOCALHOST", 31425))
+        except:
+            print("Error connecting to Server")
+            exit()
 
         self.gameid = None
         self.num = None
@@ -111,17 +118,15 @@ class VierOpEenRijGame(ConnectionListener):
     def update(self):
         connection.Pump()
         self.Pump()
-
         #sleep to make the game 60 fps
         self.clock.tick(60)
         #clear the screen
         self.screen.fill((255,255,255))
+        # draw board and panel
         self.drawBoard()
         self.drawPanel()
-
-        #kontrole
+        #controle
         self.controle()
-
         #vult bord op met winaars kleur
         if self.wint!=0:
             for x in range(self.boardBoxW):
@@ -129,41 +134,34 @@ class VierOpEenRijGame(ConnectionListener):
 
         #update the screen
         pygame.display.flip()
-
         # events/key pres
         self.eventAndKeys()
 
     def eventAndKeys(self):
-        connection.Pump()
-        self.Pump()
-        #envents/key pres
+
+        #events and key press
         for event in pygame.event.get():
             #quit if the quit button was pressed
             if event.type == pygame.QUIT:
                 self.stopped = True
                 pygame.display.quit()
-
             # key press
             if event.type == pygame.KEYDOWN and self.playerNR==self.playerTurn:
                 # pijl move
                 if event.key==pygame.K_LEFT:
                     if 0<self.pijlx:
                         self.pijlx -= 1
-                        connection.Send({"action": "place","playerTurn":self.playerTurn, "pijlx":self.pijlx,"K_DOWN":False,"gameid": self.gameid, "playerNR": self.playerNR})
+                        connection.Send({"action": "movePijl", "pijlx":self.pijlx,"gameid": self.gameid})
 
                 if event.key==pygame.K_RIGHT:
                     if self.pijlx<(self.boardBoxW-1):
                         self.pijlx += 1
-                        connection.Send({"action": "place","playerTurn":self.playerTurn, "pijlx":self.pijlx,"K_DOWN":False,"gameid": self.gameid, "playerNR": self.playerNR})
+                        connection.Send({"action": "movePijl", "pijlx":self.pijlx,"gameid": self.gameid})
 
                 if (event.key==pygame.K_KP_ENTER or event.key==pygame.K_DOWN) and self.board[0][self.pijlx]==0:
-                    # self.board[0][self.pijlx]=self.playerTurn
-                    # if self.playerAantal>self.playerTurn:
-                    #     self.playerTurn+=1
-                    # else:
-                    #     self.playerTurn=1
-                    # self.pijl=self.playerBox[self.playerTurn-1]
-                    connection.Send({"action": "place","playerTurn":self.playerTurn, "pijlx":self.pijlx,"K_DOWN":True,"gameid": self.gameid, "playerNR": self.playerNR})
+                    #self.board[0][self.pijlx]=self.playerTurn
+                    self.pijl=self.playerBox[self.playerTurn-1]
+                    connection.Send({"action": "placeBox","playerTurn":self.playerTurn, "pijlx":self.pijlx,"gameid": self.gameid, "playerNR": self.playerNR})
 
     def controle(self):
         # controle gebeurt alleen (y,x) (0,+),(+,0),(+,+),(+,-)
@@ -196,7 +194,6 @@ class VierOpEenRijGame(ConnectionListener):
                             self.wint=var
 
     def drawBoard(self):
-
         # drop box
         # if self.dropTijd<=0:
         #     self.dropTijd=self.dropTijdInit
@@ -216,17 +213,14 @@ class VierOpEenRijGame(ConnectionListener):
                     self.screen.blit(self.legeBox, [(self.boxB*2)+((x)*self.boxD)-self.boxB*x, self.boxD+(self.boxB*2)+((y)*self.boxD)-self.boxB*y])
                 if self.board[y][x]!=0:
                     self.screen.blit(self.playerBox[self.board[y][x]-1], [(self.boxB*2)+((x)*self.boxD)-self.boxB*x, self.boxD+(self.boxB*2)+((y)*self.boxD)-self.boxB*y])
-
         # place pijl
         self.screen.blit(self.pijl,( (self.boxB*2)+((self.pijlx)*self.boxD)-self.boxB*self.pijlx, (self.boxB*2)+((self.pijly)*self.boxD)-self.boxB*self.pijly))
 
     def drawPanel(self):
         panelP=self.height-self.panelH
-
         #achtergrond paneel kleur of foto
         #self.screen.blit(self.scorePanel, [0, panelP])
         pygame.draw.rect(self.screen,(0,0,0),[0,panelP,self.panelW,self.panelH])
-
         #print Player Score Labels
         x,y=0,panelP
         for i in range(self.playerAantal):
