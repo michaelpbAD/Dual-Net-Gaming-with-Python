@@ -5,6 +5,20 @@ from time import sleep
 
 
 class VierOpEenRijGame(ConnectionListener):
+    def Network_close(self, data):
+        exit()
+
+    def Network_connected(self, data):
+        print("Connected to the server")
+
+    def Network_error(self, data):
+        print("Error connecting to Server.")
+        exit()
+
+    def Network_disconnected(self, data):
+        print("disconnected from the server")
+        exit()
+
     def Network_startgame(self, data):
         self.running = True
         self.num = data["player"]
@@ -30,9 +44,6 @@ class VierOpEenRijGame(ConnectionListener):
         self.board = data["board"]
         self.playerTurn = data["playerTurn"]
         self.pijl = self.playerBox[self.playerTurn - 1]
-
-    def Close(self):
-        self._server.close(self.gameid)
 
     def __init__(self):
         pygame.init()
@@ -70,25 +81,24 @@ class VierOpEenRijGame(ConnectionListener):
         self.board = [[0 for x in range(self.boardBoxW)] for y in range(self.boardBoxH)]
 
         # define who starts
-        self.playerTurn=1
-        #defineer spaeler naam
-        self.playerNaam=["speler1", "speler2", "speler3", "speler4"]
-        #defineer player color
-        self.playerBox=[self.greenBox,self.blueBox,self.redBox,self.yellowBox]
-        # define scores
-        self.scorePlayer=[0,0,0,0]
-        self.wint=0
-        # define pijl
-        self.pijl=self.playerBox[self.playerTurn-1]
-        self.pijlx=0
-        self.pijly=0
+        self.playerTurn = 1
 
-        # try to connect to server
-        try:
-            self.Connect(("LOCALHOST", 31425))
-        except:
-            print("Error connecting to Server.")
-            exit()
+        """ put this all in a dictionary? Andreas """
+        # defineer spaeler naam
+        self.playerNaam = ["speler1", "speler2", "speler3", "speler4"]
+        # defineer player color
+        self.playerBox = [self.greenBox, self.blueBox, self.redBox, self.yellowBox]
+        # define scores
+        self.scorePlayer = [0, 0, 0, 0]
+        self.wint = 0
+        """ end dictionary"""
+
+        # define pijl (?)
+        self.pijl = self.playerBox[self.playerTurn - 1]
+        self.pijlx = 0
+        self.pijly = 0
+
+        self.Connect(("LOCALHOST", 31425))  # controleren
 
         self.gameid = None
         self.num = None
@@ -113,11 +123,11 @@ class VierOpEenRijGame(ConnectionListener):
     def update(self):
         connection.Pump()
         self.Pump()
-        #sleep to make the game 60 fps
+
+        # sleep to make the game 60 fps
         self.clock.tick(60)
-        #clear the screen
-        self.screen.fill((255,255,255))
-        # draw board and panel
+        # clear the screen
+        self.screen.fill((255, 255, 255))
         self.drawBoard()
         self.drawPanel()
 
@@ -128,11 +138,14 @@ class VierOpEenRijGame(ConnectionListener):
 
         # update the screen
         pygame.display.flip()
+
         # events/key pres
         self.eventAndKeys()
 
     def eventAndKeys(self):
-        #events and key press
+        # connection.Pump()
+        # self.Pump()
+        # envents/key pres
         for event in pygame.event.get():
             # quit if the quit button was pressed
             if event.type == pygame.QUIT:
