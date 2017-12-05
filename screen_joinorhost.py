@@ -1,4 +1,4 @@
-""" Form with tkinter: join host and/or host server """
+""" Form with tkinter: join host or host server """
 # import modules
 from tkinter import *
 from tkinter import messagebox
@@ -15,11 +15,26 @@ class joinorhost():
         self.root = Tk()
         # title of window
         self.root.title("Vier op een rij: Client or Server")
+        self.root.resizable(False, False)
+
+        # making new derived styles
+        s = ttk.Style()
+        print(s.lookup('TFrame', 'background'))
+        s.configure('vieropeenrij.TFrame', background='#1ABC9C')
+        s.configure('vieropeenrij.TLabel', background='#1ABC9C')
+
+
         # frame is part of window (for showing form elements)
-        mainframe = ttk.Frame(self.root, padding="80 80 80 80")  # padding of frame
+        mainframe = ttk.Frame(self.root, padding="80 80 80 80", style="vieropeenrij.TFrame")  # padding of frame
         mainframe.grid(column=0, row=0, sticky=(N, W, E, S))  # grid layout
         mainframe.columnconfigure(0, weight=1)
         mainframe.rowconfigure(0, weight=1)
+
+        print(mainframe['style'])
+        print(mainframe.winfo_class())
+        print(s.layout('TButton'))
+        print(s.element_options("Button.Border"))
+
         # tkinter variables for entries, spinbox
         self.socket = StringVar()
         self.nickname = StringVar()
@@ -27,12 +42,12 @@ class joinorhost():
         self.maxPlayers = StringVar()
 
         # label for text entry
-        ttk.Label(mainframe, text="Server IP-adress: Server port").grid(column=2, row=1, sticky=(W, E))
+        ttk.Label(mainframe, text="Server IP-adress: Server port", style="vieropeenrij.TLabel").grid(column=2, row=1, sticky=(W, E))
         # text entry for "socket" server to joing
         socketEntry = ttk.Entry(mainframe, width=20, textvariable=self.socket)
         socketEntry.grid(column=3, row=1, sticky=(N, W, E, S))
         # label for nickname
-        ttk.Label(mainframe, text="Nickname:").grid(column=2, row=2, sticky=(W, E))
+        ttk.Label(mainframe, text="Nickname:", style="vieropeenrij.TLabel").grid(column=2, row=2, sticky=(W, E))
         # text entry for nickname
         nicknameEntry = ttk.Entry(mainframe, width=20, textvariable=self.nickname)
         nicknameEntry.grid(column=3, row=2, sticky=(N, W, E, S))
@@ -40,23 +55,24 @@ class joinorhost():
         ttk.Button(mainframe, text="Join server", command=self.joinServer).grid(column=3, row=3, sticky=(W, E))
 
         # "or"-label
-        ttk.Label(mainframe, text="OR").grid(column=2, row=4, sticky=(W, E))
+        ttk.Label(mainframe, text="OR", style="vieropeenrij.TLabel").grid(column=2, row=4, sticky=(W, E))
 
         # label for text entry server ip and port
-        ttk.Label(mainframe, text="Your PC's IP-adress: Server port").grid(column=2, row=5, sticky=(W, E))
+        ttk.Label(mainframe, text="Your PC's IP-adress: Server port", style="vieropeenrij.TLabel").grid(column=2, row=5, sticky=(W, E))
         # entry for "socketServer"
         serverEntry = ttk.Entry(mainframe, width=15, textvariable=self.socketServer)
         serverEntry.grid(column=3, row=5, sticky=(N, W, E, S))
         # label for maximum number of players in a game
-        ttk.Label(mainframe, text="Maximum players in a game:").grid(column=2, row=6, sticky=(W, E))
+        ttk.Label(mainframe, text="Maximum number of players in a game:", style="vieropeenrij.TLabel").grid(column=2, row=6, sticky=(W, E))
         # spinbox for "maxplayers"
-        Spinbox(mainframe, from_=2, to=4, textvariable=self.maxPlayers).grid(column=3, row=6, sticky=(W, E))
+        Spinbox(mainframe, from_=2, to=4, textvariable=self.maxPlayers, width=3).grid(column=3, row=6, sticky=(W))
         # button for hosting the server, function hostServer
         ttk.Button(mainframe, text="Host server", command=self.hostServer).grid(column=3, row=7, sticky=(W, E))
 
         # loop through all child of the frame and add padding to x and y
         for child in mainframe.winfo_children():
             child.grid_configure(padx=10, pady=10)
+
         # focus on text entry "socketEntry" when started
         socketEntry.focus()
         # ============================ END FORM JOIN OR HOST SERVER ===================================

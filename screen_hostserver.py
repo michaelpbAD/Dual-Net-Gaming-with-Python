@@ -9,6 +9,7 @@ class screenServer():
         # create window
         self.root = Tk()
         self.root.title("Vier op een rij: Server")  # title of window
+        self.root.resizable(False, False)
         self.serverframe = ttk.Frame(self.root, padding="80 80 80 80")  # padding of frame
         self.serverframe.grid(column=0, row=0, sticky=(N, W, E, S))  # grid layout
         self.serverframe.columnconfigure(0, weight=1)
