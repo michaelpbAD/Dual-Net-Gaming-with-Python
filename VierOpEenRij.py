@@ -19,6 +19,9 @@ class VierOpEenRijGame(ConnectionListener):
         print("disconnected from the server")
         exit()
 
+    def Network_nickname(self,data):
+        self.playerNaam[data["playerNR"]-1] = data["nickname"]
+
     def Network_startgame(self, data):
         self.running = True
         self.num = data["player"]
@@ -110,7 +113,8 @@ class VierOpEenRijGame(ConnectionListener):
             sleep(0.01)
         # determine attributes from player #
         self.playerNR = self.num + 1
-        self.playerNaam[self.num] = nickname
+        self.playerNaam[self.num] = "me > "+nickname
+        connection.Send({"action": "nickname", "nickname": nickname, "gameid": self.gameid, "playerNR": self.playerNR})
 
     def initGraphics(self):
         self.legeBox = pygame.transform.scale(pygame.image.load("img/legeBox.png"), (self.boxD, self.boxD))

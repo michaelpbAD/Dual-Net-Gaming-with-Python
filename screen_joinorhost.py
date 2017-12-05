@@ -25,6 +25,7 @@ class joinorhost():
         self.socket = StringVar()
         self.nickname = StringVar()
         self.socketServer = StringVar()
+        self.maxPlayers = StringVar()
         # label for input field
         ttk.Label(mainframe, text="Server IP-adress: Server port").grid(column=2, row=1, sticky=(W, E))
         # text input ipaddress
@@ -42,8 +43,12 @@ class joinorhost():
         ttk.Label(mainframe, text="Your PC's IP-adress: Server port").grid(column=2, row=5, sticky=(W, E))
         serverEntry = ttk.Entry(mainframe, width=15, textvariable=self.socketServer)
         serverEntry.grid(column=3, row=5, sticky=(N, W, E, S))
+        # spinbox for choosing maximum number of players
+
+        ttk.Label(mainframe, text="Maximum players in a game:").grid(column=2, row=6, sticky=(W, E))
+        Spinbox(mainframe, from_=2, to=4, textvariable=self.maxPlayers).grid(column=3, row=6, sticky=(W, E))
         # button for hosting the server
-        ttk.Button(mainframe, text="Host server", command=self.hostServer).grid(column=3, row=6, sticky=(W, E))
+        ttk.Button(mainframe, text="Host server", command=self.hostServer).grid(column=3, row=7, sticky=(W, E))
         # loop through all child of the frame and add padding to x and y
         for child in mainframe.winfo_children():
             child.grid_configure(padx=10, pady=10)
@@ -60,17 +65,25 @@ class joinorhost():
             return False
         else:
             #join server vieropeenrij game
+            self.root.destroy()
             print("Joining server at: "+check[0]+" , "+check[1] +" as "+nickname)
             import VierOpEenRij
             self.playVierOpEenRij = VierOpEenRij.VierOpEenRijGame(check, nickname)
 
+
     def hostServer(self):
         check = self.checkSocket(self.socketServer.get())
-        if check:
+        try:
+            maxPlayers = int(self.maxPlayers.get())
+        except:
+            maxPlayers = 0
+        if check and (maxPlayers == 2 or maxPlayers == 3 or maxPlayers == 4):
             # hosting the server
             print("Hosting server at: ", check)
-            self.hostS = screen_hostserver.screenServer(check)
+            self.hostS = screen_hostserver.screenServer(check, maxPlayers)
+            self.root.destroy()
         else:
+            messagebox.showerror("Error","Maximum players is 2, 3 or 4.")
             return False
 
     def checkSocket(self, socket):
@@ -101,7 +114,10 @@ class joinorhost():
 
     # update GUI 1 time
     def update(self):
-        self.root.update()
+        try:
+            self.root.update()
+        except:
+            pass
         if self.hostS != None:
             self.hostS.update()
         if self.playVierOpEenRij != None:
