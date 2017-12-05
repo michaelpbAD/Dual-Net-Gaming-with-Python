@@ -110,7 +110,7 @@ class VierOpEenRijGame(ConnectionListener):
         while not self.running:
             self.Pump()
             connection.Pump()
-            sleep(0.01)
+            sleep(0.001)
         # determine attributes from player #
         self.playerNR = self.num + 1
         self.playerNaam[self.num] = "me > "+nickname

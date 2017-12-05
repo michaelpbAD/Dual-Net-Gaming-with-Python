@@ -32,7 +32,6 @@ class vieropeenrijServer(Server):
     def __init__(self, maxPlayers,*args, **kwargs):  # controleren
         Server.__init__(self, *args, **kwargs)
         self.maxPlayers = maxPlayers
-        print(self.maxPlayers)
         self.games = []
         self.queue = None
         self.currentIndex = 0
