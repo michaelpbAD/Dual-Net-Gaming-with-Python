@@ -1,11 +1,9 @@
 """ This python script starts all other scripts. """
-""" Form with tkinter: nickname, server selection """
-# import tkinter / ttk for GUI
-from tkinter import *
-from tkinter import ttk
+# import screen_joinorhost.py
 import screen_joinorhost
 
+# make object to initialize the window for joining or hosting a server
 start = screen_joinorhost.joinorhost()
-while 1:
-    #checkIp(joinhost.getIp())
+# keep updating object
+while not start.closedWindow:
     start.update()
