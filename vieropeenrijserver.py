@@ -1,7 +1,7 @@
+""" Vier op een rij - Server"""
 from time import sleep
 from PodSixNet.Server import Server
 from PodSixNet.Channel import Channel
-
 
 class ClientChannel(Channel):
     def Network(self, data):
@@ -12,7 +12,6 @@ class ClientChannel(Channel):
         playerTurn = data["playerTurn"]
         pijlx = data["pijlx"]
         K_DOWN = data["K_DOWN"]
-
         playerNR = data["playerNR"]
 
         # id of game given by server at start of game
@@ -26,7 +25,6 @@ class ClientChannel(Channel):
 
     def Close(self):
         self._server.close(self.gameid)
-
 
 class vieropeenrijServer(Server):
     def __init__(self, maxPlayers,*args, **kwargs):
@@ -174,28 +172,10 @@ class Game(object):
 
                     # links naar beneden controle
                     if y < (self.boardBoxH - 3) and x > 2:
-
                         if var == self.board[y + 1][x - 1] and var == self.board[y + 2][x - 2] and var == \
                                 self.board[y + 3][x - 3]:
                             self.wint = var
+                # controleer of het gameboard lege vakken bevat
                 else:
                     geenNull=False
         self.draw = geenNull
-        print(geenNull)
-        print(self.draw)
-
-
-##print("STARTING SERVER ON LOCALHOST")
-#vieropenrijServer = vieropeenrijServer(localaddr=("LOCALHOST", 31425))
-
-
-# def updateVierServer():
-#     vieropenrijServer.Pump()
-#     sleep(0.01)
-#     vieropenrijServer.tick()
-
-
-# def updateServer():
-#     print("Clock is ticking")
-#     vieropenrijServer.Pump()
-#     sleep(0.0001)

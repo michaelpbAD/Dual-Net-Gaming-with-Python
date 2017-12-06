@@ -23,6 +23,13 @@ We are going to make "VierOpEenRij" in python with following libraries:
 *   used "sleep" function of module "time": https://docs.python.org/3/library/time.html
 
 # How to play this game?
-1.  Install Python 3.5
-2.  Install "pygame" module with "pip"
-3.  "python start.py"
+1.  Install Python 3.5 or 3.6
+2.  Install "pip" for python 3.5 or 3.6 (for Linux: "pip3")
+3.  
+    * Windows: pip install pygame
+    * Linux: sudo pip3 install pygame
+4.  If you don't have "tkinter", install it with "pip"
+5.
+    * Windows: pip install pygame
+    * Linux: sudo pip3 install pygame
+6. python3 start.py
