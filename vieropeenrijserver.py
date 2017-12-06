@@ -21,13 +21,17 @@ class ClientChannel(Channel):
         # tells server to place line
         self._server.placeLine(playerTurn, pijlx, K_DOWN, data, self.gameid, playerNR)
 
+    def Network_nickname(self, data):
+        self._server.nickname(data)
+
     def Close(self):
         self._server.close(self.gameid)
 
 
 class vieropeenrijServer(Server):
-    def __init__(self, *args, **kwargs):  # controleren
+    def __init__(self, maxPlayers,*args, **kwargs):  # controleren
         Server.__init__(self, *args, **kwargs)
+        self.maxPlayers = maxPlayers
         self.games = []
         self.queue = None
         self.currentIndex = 0
@@ -42,7 +46,7 @@ class vieropeenrijServer(Server):
         if self.queue == None:  # controleren
             self.currentIndex += 1
             channel.gameid = self.currentIndex
-            self.queue = Game(channel, self.currentIndex)
+            self.queue = Game(channel, self.currentIndex, self.maxPlayers)
         elif self.numPlayers == 2:
             channel.gameid = self.currentIndex
             self.queue.player[1] = channel
@@ -77,7 +81,7 @@ class vieropeenrijServer(Server):
                 for i in range(game.playerAantal):
                     game.player[i].Send(
                         {"action": "boardWipe", "board": game.board, "playerTurn": game.Turn, "wint": game.wint})
-        self.Pump()
+        #self.Pump()
 
     def close(self, gameid):
         try:
@@ -87,12 +91,18 @@ class vieropeenrijServer(Server):
         except:
             pass
 
+    def nickname(self, data):
+        game = [a for a in self.games if a.gameid == data["gameid"]][0]
+        for i in range(game.playerAantal):
+            if i != data["playerNR"]-1:
+                game.player[i].Send({"action": "nickname", "playerNR": data["playerNR"], "nickname": data["nickname"]})
+
 
 class Game(object):  # controleren
-    def __init__(self, player0, currentIndex):
+    def __init__(self, player0, currentIndex, maxPlayers):
         # whose turn
         self.Turn = 1
-        self.playerAantal = 2
+        self.playerAantal = maxPlayers
         # dimensions tiles game board
         self.boardBoxH = 7
         self.boardBoxW = 14
@@ -167,14 +177,14 @@ class Game(object):  # controleren
                             self.wint = var
 
 
-print("STARTING SERVER ON LOCALHOST")
-vieropenrijServer = vieropeenrijServer(localaddr=("LOCALHOST", 31425))
+##print("STARTING SERVER ON LOCALHOST")
+#vieropenrijServer = vieropeenrijServer(localaddr=("LOCALHOST", 31425))
 
 
-while 1:
-    vieropenrijServer.Pump()
-    sleep(0.01)
-    vieropenrijServer.tick()
+# def updateVierServer():
+#     vieropenrijServer.Pump()
+#     sleep(0.01)
+#     vieropenrijServer.tick()
 
 
 # def updateServer():

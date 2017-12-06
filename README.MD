@@ -18,5 +18,11 @@ Commit changes (with a meaninful title and description)
 We are going to make "VierOpEenRij" in python with following libraries:
 *   PodSixNet: https://github.com/chr15m/PodSixNet/tree/python3
 *   pygame: http://pygame.org/news
-*   tkinter: https://wiki.python.org/moin/TkInter, http://www.tkdocs.com/tutorial/index.html, https://docs.python.org/3.5/library/tkinter.html
+*   tkinter: https://wiki.python.org/moin/TkInter, http://www.tkdocs.com/tutorial/index.html, https://docs.python.org/3.5/library/tkinter.html, http://effbot.org/tkinterbook/tkinter-events-and-bindings.htm#protocols
 *   re (regular expressions): https://docs.python.org/3.5/library/re.html
+*   used "sleep" function of module "time": https://docs.python.org/3/library/time.html
+
+# How to play this game?
+1.  Install Python 3.5
+2.  Install "pygame" module with "pip"
+3.  "python start.py"
