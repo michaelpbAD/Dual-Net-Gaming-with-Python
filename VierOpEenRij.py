@@ -30,6 +30,9 @@ class VierOpEenRijGame(ConnectionListener):
         self.boardBoxH = data["boardBoxH"]
         self.boardBoxW = data["boardBoxW"]
 
+        # define game board dimensions
+        self.board = [[0 for x in range(self.boardBoxW)] for y in range(self.boardBoxH)]
+
         #dimensies van scherm aanpasen naar spel grote
         # gameboard dimensions px
         self.boardH = self.boardBoxH * self.boxD - (self.boardBoxH - 1) * self.boxB + self.boxB * 4
