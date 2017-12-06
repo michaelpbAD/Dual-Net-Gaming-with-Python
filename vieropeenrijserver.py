@@ -29,7 +29,7 @@ class ClientChannel(Channel):
 
 
 class vieropeenrijServer(Server):
-    def __init__(self, maxPlayers,*args, **kwargs):  # controleren
+    def __init__(self, maxPlayers,*args, **kwargs):
         Server.__init__(self, *args, **kwargs)
         self.maxPlayers = maxPlayers
         self.games = []
@@ -39,11 +39,11 @@ class vieropeenrijServer(Server):
 
     channelClass = ClientChannel
 
-    def Connected(self, channel, addr):  # controleren
+    def Connected(self, channel, addr):
         self.numPlayers += 1
         print('new connection:', channel)
 
-        if self.queue == None:  # controleren
+        if self.queue == None:
             self.currentIndex += 1
             channel.gameid = self.currentIndex
             self.queue = Game(channel, self.currentIndex, self.maxPlayers)
@@ -59,8 +59,7 @@ class vieropeenrijServer(Server):
 
         if self.numPlayers >= self.queue.playerAantal:
             for i in range(self.queue.playerAantal):
-                self.queue.player[i].Send({"action": "startgame", "player": i, "gameid": self.queue.gameid,
-                                           "playerAantal": self.queue.playerAantal})
+                self.queue.player[i].Send({"action": "startgame", "player": i, "gameid": self.queue.gameid, "playerAantal": self.queue.playerAantal, "boardBoxH": self.queue.boardBoxH, "boardBoxW": self.queue.boardBoxW})
 
             self.games.append(self.queue)
             self.queue = None
@@ -81,7 +80,7 @@ class vieropeenrijServer(Server):
                 for i in range(game.playerAantal):
                     game.player[i].Send(
                         {"action": "boardWipe", "board": game.board, "playerTurn": game.Turn, "wint": game.wint})
-        #self.Pump()
+        self.Pump()
 
     def close(self, gameid):
         try:
@@ -98,14 +97,14 @@ class vieropeenrijServer(Server):
                 game.player[i].Send({"action": "nickname", "playerNR": data["playerNR"], "nickname": data["nickname"]})
 
 
-class Game(object):  # controleren
+class Game(object):
     def __init__(self, player0, currentIndex, maxPlayers):
         # whose turn
         self.Turn = 1
         self.playerAantal = maxPlayers
         # dimensions tiles game board
         self.boardBoxH = 7
-        self.boardBoxW = 14
+        self.boardBoxW = 20
         # define game board dimensions
         self.board = [[0 for x in range(self.boardBoxW)] for y in range(self.boardBoxH)]
         # initialize the players including the one who started the game

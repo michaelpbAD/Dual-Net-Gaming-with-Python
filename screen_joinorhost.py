@@ -5,6 +5,7 @@ from tkinter import messagebox
 from tkinter import ttk
 import re
 
+
 class joinorhost():
     def __init__(self):
         self.closedWindow = False
@@ -22,7 +23,6 @@ class joinorhost():
         print(s.lookup('TFrame', 'background'))
         s.configure('vieropeenrij.TFrame', background='#1ABC9C')
         s.configure('vieropeenrij.TLabel', background='#1ABC9C')
-
 
         # frame is part of window (for showing form elements)
         mainframe = ttk.Frame(self.root, padding="80 80 80 80", style="vieropeenrij.TFrame")  # padding of frame
@@ -42,7 +42,8 @@ class joinorhost():
         self.maxPlayers = StringVar()
 
         # label for text entry
-        ttk.Label(mainframe, text="Server IP-adress: Server port", style="vieropeenrij.TLabel").grid(column=2, row=1, sticky=(W, E))
+        ttk.Label(mainframe, text="Server IP-adress: Server port", style="vieropeenrij.TLabel").grid(column=2, row=1,
+                                                                                                     sticky=(W, E))
         # text entry for "socket" server to joing
         socketEntry = ttk.Entry(mainframe, width=20, textvariable=self.socket)
         socketEntry.grid(column=3, row=1, sticky=(N, W, E, S))
@@ -58,12 +59,16 @@ class joinorhost():
         ttk.Label(mainframe, text="OR", style="vieropeenrij.TLabel").grid(column=2, row=4, sticky=(W, E))
 
         # label for text entry server ip and port
-        ttk.Label(mainframe, text="Your PC's IP-adress: Server port", style="vieropeenrij.TLabel").grid(column=2, row=5, sticky=(W, E))
+        ttk.Label(mainframe, text="Your PC's IP-adress: Server port", style="vieropeenrij.TLabel").grid(column=2, row=5,
+                                                                                                        sticky=(W, E))
         # entry for "socketServer"
         serverEntry = ttk.Entry(mainframe, width=15, textvariable=self.socketServer)
         serverEntry.grid(column=3, row=5, sticky=(N, W, E, S))
         # label for maximum number of players in a game
-        ttk.Label(mainframe, text="Maximum number of players in a game:", style="vieropeenrij.TLabel").grid(column=2, row=6, sticky=(W, E))
+        ttk.Label(mainframe, text="Maximum number of players in a game:", style="vieropeenrij.TLabel").grid(column=2,
+                                                                                                            row=6,
+                                                                                                            sticky=(
+                                                                                                            W, E))
         # spinbox for "maxplayers"
         Spinbox(mainframe, from_=2, to=4, textvariable=self.maxPlayers, width=3).grid(column=3, row=6, sticky=(W))
         # button for hosting the server, function hostServer
@@ -85,18 +90,17 @@ class joinorhost():
         # get nickname out of text entry
         nickname = self.nickname.get().strip()
         # check can't be false and nickname can't be empty
-        if not(checkedSocket and nickname != ""):
-            messagebox.showerror("Error","No empty nickname allowed.")
+        if not (checkedSocket and nickname != ""):
+            messagebox.showerror("Error", "No empty nickname allowed.")
             return False
         else:
             # close the window
             self.root.destroy()
             # import VierOpEenRij.py
             import VierOpEenRij
-            print("Joining server at: "+checkedSocket[0]+" : "+checkedSocket[1] +" as "+nickname)
+            print("Joining server at: " + checkedSocket[0] + " : " + checkedSocket[1] + " as " + nickname)
             # join server by making an object from VierOpEenRijGame with arguments: checkedSocket and nickname
             self.playVierOpEenRij = VierOpEenRij.VierOpEenRijGame(checkedSocket, nickname)
-
 
     def hostServer(self):
         # get socket out of text entry and check if it is valid
@@ -112,40 +116,41 @@ class joinorhost():
             self.root.destroy()
             # import screen_server.py
             import screen_hostserver
-            print("Hosting server at: "+checkedSocket[0]+" : "+checkedSocket[1] +" with maximum players in a game "+ str(maxPlayers))
+            print("Hosting server at: " + checkedSocket[0] + " : " + checkedSocket[
+                1] + " with maximum players in a game " + str(maxPlayers))
             # hosting the server with arguments: checkedSocket, maxPlayers
             self.hostS = screen_hostserver.screenServer(checkedSocket, maxPlayers)
         else:
-            messagebox.showerror("Error","Maximum players is 2, 3 or 4.")
+            messagebox.showerror("Error", "Maximum players is 2, 3 or 4.")
             return False
 
-    #check if socket entered is valid
+    # check if socket entered is valid
     def checkSocket(self, socket):
         try:
             # split socket if possible
             isIp, isPort = socket.split(":")
         except:
-            messagebox.showerror("Error","Format is IP:Port")
+            messagebox.showerror("Error", "Format is IP:Port")
             return False
 
         # lenth of IP adress may not be smaller than 7 or higher than 15
         if len(isIp) < 7 or len(isIp) > 15:
-            messagebox.showerror("Error","This can not be a valid IP address.")
+            messagebox.showerror("Error", "This can not be a valid IP address.")
             return False
         else:
             # check if pattern of IP is valid (3 dots with groups of 1 to 3 digits
             patIp = re.compile(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}')
             matchIp = patIp.search(isIp)
             if matchIp == None or matchIp.group() != isIp:
-                messagebox.showerror("Error","This can not be a valid IP address.")
+                messagebox.showerror("Error", "This can not be a valid IP address.")
                 return False
         try:
             # check if port is negative
             if int(isPort) != abs(int(isPort)):
-                messagebox.showerror("Error","Not a valid port number.")
+                messagebox.showerror("Error", "Not a valid port number.")
                 return False
         except:
-            messagebox.showerror("Error","Not a valid port number.")
+            messagebox.showerror("Error", "Not a valid port number.")
             return False
         # return the socket
         return [isIp, isPort]
@@ -166,7 +171,10 @@ class joinorhost():
             pass
         # only update when object exists
         if self.hostS != None:
-            self.hostS.update()
+            if self.hostS.closedWindow == False:
+                self.hostS.update()
+            else:
+                self.closedWindow = True
         # only update when object exists
         if self.playVierOpEenRij != None:
             self.playVierOpEenRij.update()
