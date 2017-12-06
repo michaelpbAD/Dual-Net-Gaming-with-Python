@@ -72,15 +72,17 @@ class vieropeenrijServer(Server):
 
     def tick(self):
         for game in self.games:
-            if game.wint != 0:
+            if game.wint != 0 or game.draw:
                 game.wint = 0
                 game.Turn = 1
+                game.draw = False
                 game.board = [[0 for x in range(game.boardBoxW)] for y in range(game.boardBoxH)]
                 sleep(2)
                 for i in range(game.playerAantal):
                     game.player[i].Send(
                         {"action": "boardWipe", "board": game.board, "playerTurn": game.Turn, "wint": game.wint})
         self.Pump()
+
 
     def close(self, gameid):
         try:
@@ -111,6 +113,7 @@ class Game(object):
         self.player = [player0, None, None, None]
         self.scorePlayer = [0, 0, 0, 0]
         self.wint = 0
+        self.draw = False
 
         # gameid of game
         self.gameid = currentIndex
@@ -148,6 +151,7 @@ class Game(object):
 
     def controle(self):
         # controle gebeurt alleen (y,x) (0,+),(+,0),(+,+),(+,-)
+        geenNull = True
         for y in range(self.boardBoxH):
             for x in range(self.boardBoxW):
                 if self.board[y][x] != 0:
@@ -174,6 +178,11 @@ class Game(object):
                         if var == self.board[y + 1][x - 1] and var == self.board[y + 2][x - 2] and var == \
                                 self.board[y + 3][x - 3]:
                             self.wint = var
+                else:
+                    geenNull=False
+        self.draw = geenNull
+        print(geenNull)
+        print(self.draw)
 
 
 ##print("STARTING SERVER ON LOCALHOST")
