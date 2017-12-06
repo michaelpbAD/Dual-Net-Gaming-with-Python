@@ -1,4 +1,4 @@
-""" This python script starts all other scripts. """
+""" This python script starts screen_joinorhost.py (object) """
 # import screen_joinorhost.py
 import screen_joinorhost
 

@@ -5,7 +5,6 @@ from tkinter import messagebox
 from tkinter import ttk
 import re
 
-
 class joinorhost():
     def __init__(self):
         self.closedWindow = False
@@ -20,7 +19,6 @@ class joinorhost():
 
         # making new derived styles
         s = ttk.Style()
-        print(s.lookup('TFrame', 'background'))
         s.configure('vieropeenrij.TFrame', background='#1ABC9C')
         s.configure('vieropeenrij.TLabel', background='#1ABC9C')
 
@@ -29,11 +27,6 @@ class joinorhost():
         mainframe.grid(column=0, row=0, sticky=(N, W, E, S))  # grid layout
         mainframe.columnconfigure(0, weight=1)
         mainframe.rowconfigure(0, weight=1)
-
-        print(mainframe['style'])
-        print(mainframe.winfo_class())
-        print(s.layout('TButton'))
-        print(s.element_options("Button.Border"))
 
         # tkinter variables for entries, spinbox
         self.socket = StringVar()
@@ -65,10 +58,7 @@ class joinorhost():
         serverEntry = ttk.Entry(mainframe, width=15, textvariable=self.socketServer)
         serverEntry.grid(column=3, row=5, sticky=(N, W, E, S))
         # label for maximum number of players in a game
-        ttk.Label(mainframe, text="Maximum number of players in a game:", style="vieropeenrij.TLabel").grid(column=2,
-                                                                                                            row=6,
-                                                                                                            sticky=(
-                                                                                                            W, E))
+        ttk.Label(mainframe, text="Maximum number of players in a game:", style="vieropeenrij.TLabel").grid(column=2, row=6, sticky=(W, E))
         # spinbox for "maxplayers"
         Spinbox(mainframe, from_=2, to=4, textvariable=self.maxPlayers, width=3).grid(column=3, row=6, sticky=(W))
         # button for hosting the server, function hostServer
