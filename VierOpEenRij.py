@@ -27,6 +27,25 @@ class VierOpEenRijGame(ConnectionListener):
         self.num = data["player"]
         self.gameid = data["gameid"]
         self.playerAantal = data["playerAantal"]
+        self.boardBoxH = data["boardBoxH"]
+        self.boardBoxW = data["boardBoxW"]
+
+        #dimensies van scherm aanpasen naar spel grote
+        # gameboard dimensions px
+        self.boardH = self.boardBoxH * self.boxD - (self.boardBoxH - 1) * self.boxB + self.boxB * 4
+        self.boardW = self.boardBoxW * self.boxD - (self.boardBoxW - 1) * self.boxB + self.boxB * 4
+
+        # score board height
+        self.panelH = 200
+        # window dimensions
+        self.width = self.boardW
+        self.height = self.boardH + self.boxD + self.panelH
+        # score board width
+        self.panelW = self.width
+
+        # initialize the screen with windows dimensions
+        self.screen = pygame.display.set_mode((self.width, self.height))
+        pygame.display.set_caption("Vier op een rij")
 
     def Network_place(self, data):
         # get attributes
@@ -51,7 +70,6 @@ class VierOpEenRijGame(ConnectionListener):
     def __init__(self, socket, nickname):
         pygame.init()
         pygame.font.init()
-        self.stopped = False
         # dimensions tiles game board
         self.boardBoxH = 7
         self.boardBoxW = 14
@@ -96,12 +114,12 @@ class VierOpEenRijGame(ConnectionListener):
         self.wint = 0
         """ end dictionary"""
 
-        # define pijl (?)
+        # define pijl
         self.pijl = self.playerBox[self.playerTurn - 1]
         self.pijlx = 0
         self.pijly = 0
 
-        self.Connect((socket[0], int(socket[1])))  # controleren
+        self.Connect((socket[0], int(socket[1])))
 
         self.gameid = None
         self.num = None
@@ -151,8 +169,8 @@ class VierOpEenRijGame(ConnectionListener):
         for event in pygame.event.get():
             # quit if the quit button was pressed
             if event.type == pygame.QUIT:
-                self.stopped = True
                 pygame.display.quit()
+                exit()
 
             # key press
             if event.type == pygame.KEYDOWN and self.playerTurn == self.playerNR:
