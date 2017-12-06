@@ -104,7 +104,7 @@ class Game(object):
         self.playerAantal = maxPlayers
         # dimensions tiles game board
         self.boardBoxH = 7
-        self.boardBoxW = 20
+        self.boardBoxW = 14
         # define game board dimensions
         self.board = [[0 for x in range(self.boardBoxW)] for y in range(self.boardBoxH)]
         # initialize the players including the one who started the game
