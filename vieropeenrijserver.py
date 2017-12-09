@@ -34,7 +34,7 @@ class vieropeenrijServer(Server):
         self.queue = None
         self.currentIndex = 0
         self.numPlayers = 0
-
+    # verplicht voor de module PodSixNet
     channelClass = ClientChannel
 
     def Connected(self, channel, addr):
